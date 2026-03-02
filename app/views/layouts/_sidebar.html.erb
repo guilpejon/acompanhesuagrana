@@ -21,6 +21,7 @@
     <%= render "layouts/nav_item", icon: "credit-card", label: "Credit Cards", path: credit_cards_path(month: month_param), active: controller_name == "credit_cards" %>
     <%= render "layouts/nav_item", icon: "landmark", label: "Bank Accounts", path: bank_accounts_path(month: month_param), active: controller_name == "bank_accounts" %>
     <%= render "layouts/nav_item", icon: "trending-up", label: "Investments", path: investments_path(month: month_param), active: controller_name == "investments" %>
+    <%= render "layouts/nav_item", icon: "layers", label: "Possessions", path: possessions_path, active: controller_name == "possessions" %>
     <%= render "layouts/nav_item", icon: "bar-chart-2", label: "Forecast", path: forecast_path(month: month_param), active: controller_name == "forecast" %>
     <%= render "layouts/nav_item", icon: "tag", label: "Categories", path: categories_path(month: month_param), active: controller_name == "categories" %>
     <%= render "layouts/nav_item", icon: "settings", label: "Settings", path: edit_user_settings_path, active: controller_name == "settings" %>

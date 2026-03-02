@@ -23,6 +23,18 @@ class DashboardController < ApplicationController
     category_color_map = current_user.categories.pluck(:name, :color).to_h
     @spending_colors = @spending_by_category.keys.map { |name| category_color_map[name] || "#6C63FF" }
 
+    # Spending by payee for donut chart
+    @spending_by_payee = @expenses
+      .joins(:payee)
+      .group("payees.name")
+      .sum(:amount)
+      .sort_by { |_, v| -v }
+      .first(8)
+      .to_h
+
+    payee_palette = %w[#6C63FF #00D4AA #FF6B6B #F7B731 #A78BFA #34D399 #60A5FA #F472B6]
+    @spending_by_payee_colors = payee_palette.first(@spending_by_payee.size)
+
     # Monthly cash flow for last 6 months (bar chart)
     @monthly_income = current_user.incomes
       .where(date: 6.months.ago.beginning_of_month..Date.current.end_of_month)
@@ -36,6 +48,9 @@ class DashboardController < ApplicationController
 
     # Bank accounts total balance
     @total_bank_balance = current_user.bank_accounts.sum(:balance)
+
+    # Possessions total current value
+    @total_possessions_value = current_user.possessions.sum(:current_value)
 
     # Recent transactions
     @recent_transactions = current_user.expenses

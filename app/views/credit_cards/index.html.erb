@@ -32,11 +32,11 @@
           <div class="p-4 space-y-3">
             <div class="flex items-center justify-between text-sm">
               <span style="color: #8892A4;">Current Bill</span>
-              <span class="font-semibold" style="color: #F7B731;"><%= format_brl(card.current_bill(@current_date)) %></span>
+              <span class="font-semibold" style="color: #F7B731;"><%= format_currency(card.current_bill(@current_date)) %></span>
             </div>
             <div class="flex items-center justify-between text-sm">
               <span style="color: #8892A4;">Limit</span>
-              <span class="font-medium" style="color: #E2E8F0;"><%= format_brl(card.limit) %></span>
+              <span class="font-medium" style="color: #E2E8F0;"><%= format_currency(card.limit) %></span>
             </div>
             <div class="flex items-center justify-between text-sm">
               <span style="color: #8892A4;">Billing / Due</span>

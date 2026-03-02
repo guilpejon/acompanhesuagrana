@@ -86,4 +86,9 @@ class UserTest < ActiveSupport::TestCase
     user = build(:user, currency: "USD")
     assert_equal "$", user.currency_symbol
   end
+
+  test "currency_symbol returns € for EUR" do
+    user = build(:user, currency: "EUR")
+    assert_equal "€", user.currency_symbol
+  end
 end

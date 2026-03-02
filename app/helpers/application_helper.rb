@@ -2,9 +2,16 @@ module ApplicationHelper
   include Pagy::Frontend
   include IconHelper
 
-  def format_brl(amount)
+  def format_currency(amount)
     number = amount.to_f
-    "R$ #{format('%.2f', number).gsub('.', ',').gsub(/(\d)(?=(\d{3})+,)/, '\1.')}"
+    case current_user&.currency || "BRL"
+    when "USD"
+      number_to_currency(number, unit: "$", separator: ".", delimiter: ",", precision: 2)
+    when "EUR"
+      number_to_currency(number, unit: "€", separator: ",", delimiter: ".", format: "%n %u", precision: 2)
+    else # BRL
+      number_to_currency(number, unit: "R$", separator: ",", delimiter: ".", format: "%u %n", precision: 2)
+    end
   end
 
   def pnl_color(value)

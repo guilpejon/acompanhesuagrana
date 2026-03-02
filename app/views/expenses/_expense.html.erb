@@ -11,6 +11,10 @@
       <span class="text-xs" style="color: #8892A4;"><%= expense.date.strftime("%d %b %Y") %></span>
       <span class="text-xs" style="color: #2A2F45;">·</span>
       <span class="text-xs" style="color: #8892A4;"><%= expense.category.name %></span>
+      <% if expense.payee %>
+        <span class="text-xs" style="color: #2A2F45;">·</span>
+        <span class="text-xs" style="color: #8892A4;"><%= expense.payee.name %></span>
+      <% end %>
       <% if expense.payment_method == "pix" %>
         <span class="text-xs" style="color: #2A2F45;">·</span>
         <span class="text-xs font-medium px-1.5 py-0.5 rounded" style="background-color: rgba(20,184,166,0.15); color: #14B8A6;">PIX</span>
@@ -35,7 +39,7 @@
     <% if expense.recurring? %>
       <%= svg_icon "repeat", css_class: "w-3.5 h-3.5", stroke: "#8892A4" %>
     <% end %>
-    <span class="text-sm font-semibold min-w-20 text-right" style="color: #FF6B6B;"><%= format_brl(expense.amount) %></span>
+    <span class="text-sm font-semibold min-w-20 text-right" style="color: #FF6B6B;"><%= format_currency(expense.amount) %></span>
   </div>
 
   <%# Actions %>

@@ -3,7 +3,7 @@
     <div>
       <h1 class="text-xl font-bold" style="color: #E2E8F0;">Income</h1>
       <p class="text-sm mt-0.5" style="color: #8892A4;">
-        Total: <span class="font-semibold" style="color: #00D4AA;"><%= format_brl(@total) %></span>
+        Total: <span class="font-semibold" style="color: #00D4AA;"><%= format_currency(@total) %></span>
       </p>
     </div>
     <%= link_to new_income_path, class: "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors hover:opacity-90", style: "background-color: #6C63FF; color: white;" do %>

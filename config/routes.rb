@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     end
   end
   resources :categories
+  resources :payees
+  resources :possessions
   get "/forecast", to: "forecast#index", as: :forecast
 
   namespace :user do

@@ -19,15 +19,15 @@
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
     <div class="rounded-xl border p-4" style="background-color: #1E2130; border-color: #2A2F45;">
       <p class="text-xs font-medium uppercase tracking-wide mb-2" style="color: #8892A4;">Total Invested</p>
-      <p class="text-lg font-bold" style="color: #E2E8F0;"><%= format_brl(@total_invested) %></p>
+      <p class="text-lg font-bold" style="color: #E2E8F0;"><%= format_currency(@total_invested) %></p>
     </div>
     <div class="rounded-xl border p-4" style="background-color: #1E2130; border-color: #2A2F45;">
       <p class="text-xs font-medium uppercase tracking-wide mb-2" style="color: #8892A4;">Current Value</p>
-      <p class="text-lg font-bold" style="color: #F7B731;"><%= format_brl(@current_value) %></p>
+      <p class="text-lg font-bold" style="color: #F7B731;"><%= format_currency(@current_value) %></p>
     </div>
     <div class="rounded-xl border p-4" style="background-color: #1E2130; border-color: #2A2F45;">
       <p class="text-xs font-medium uppercase tracking-wide mb-2" style="color: #8892A4;">P&L</p>
-      <p class="text-lg font-bold" style="color: <%= pnl_color(@total_pnl) %>;"><%= format_brl(@total_pnl) %></p>
+      <p class="text-lg font-bold" style="color: <%= pnl_color(@total_pnl) %>;"><%= format_currency(@total_pnl) %></p>
     </div>
     <div class="rounded-xl border p-4" style="background-color: #1E2130; border-color: #2A2F45;">
       <p class="text-xs font-medium uppercase tracking-wide mb-2" style="color: #8892A4;">Return</p>
@@ -78,7 +78,7 @@
 
                 <%# Mobile: just show value and P&L %>
                 <div class="md:hidden flex flex-col items-end gap-0.5">
-                  <span class="text-sm font-semibold" style="color: #F7B731;"><%= format_brl(inv.current_value) %></span>
+                  <span class="text-sm font-semibold" style="color: #F7B731;"><%= format_currency(inv.current_value) %></span>
                   <span class="text-xs font-medium" style="color: <%= pnl_color(inv.profit_loss_percent) %>;">
                     <%= inv.profit_loss_percent >= 0 ? "+" : "" %><%= inv.profit_loss_percent %>%
                   </span>
@@ -89,16 +89,16 @@
                   <span class="text-sm" style="color: #E2E8F0;"><%= inv.quantity.to_f %></span>
                 </div>
                 <div class="hidden md:block text-right">
-                  <span class="text-sm" style="color: #E2E8F0;"><%= format_brl(inv.average_price) %></span>
+                  <span class="text-sm" style="color: #E2E8F0;"><%= format_currency(inv.average_price) %></span>
                 </div>
                 <div class="hidden md:block text-right">
-                  <span class="text-sm" style="color: #E2E8F0;"><%= format_brl(inv.current_price) %></span>
+                  <span class="text-sm" style="color: #E2E8F0;"><%= format_currency(inv.current_price) %></span>
                   <% if inv.last_price_update_at %>
                     <p class="text-xs" style="color: #8892A4;"><%= inv.last_price_update_at.strftime("%d/%m %H:%M") %></p>
                   <% end %>
                 </div>
                 <div class="hidden md:block text-right">
-                  <span class="text-sm font-semibold" style="color: #F7B731;"><%= format_brl(inv.current_value) %></span>
+                  <span class="text-sm font-semibold" style="color: #F7B731;"><%= format_currency(inv.current_value) %></span>
                 </div>
                 <div class="hidden md:flex items-center justify-end gap-1.5">
                   <span class="text-sm font-medium" style="color: <%= pnl_color(inv.profit_loss_percent) %>;">

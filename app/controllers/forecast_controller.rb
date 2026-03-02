@@ -6,11 +6,26 @@ class ForecastController < ApplicationController
       .includes(:category)
       .order("categories.name")
 
-    # Projected spending by category from recurring
-    @projected_by_category = @recurring_expenses
+    # Installment expenses due this month (not already counted as recurring)
+    @installment_expenses = current_user.expenses
+      .for_month(@current_date)
+      .where("total_installments > 1")
+      .where(recurring: false)
+      .includes(:category)
+      .order("categories.name")
+
+    # Projected spending by category (recurring + installments combined)
+    recurring_by_category = @recurring_expenses
       .joins(:category)
       .group("categories.name", "categories.color")
       .sum(:amount)
+
+    installment_by_category = @installment_expenses
+      .joins(:category)
+      .group("categories.name", "categories.color")
+      .sum(:amount)
+
+    @projected_by_category = recurring_by_category.merge(installment_by_category) { |_key, a, b| a + b }
 
     # Previous month actuals for comparison
     prev_month = @current_date - 1.month
@@ -22,7 +37,7 @@ class ForecastController < ApplicationController
       .group("categories.name")
       .sum(:amount)
 
-    @projected_total = @recurring_expenses.sum(:amount)
+    @projected_total = @recurring_expenses.sum(:amount) + @installment_expenses.sum(:amount)
 
     # Projected income from recurring
     @recurring_incomes = current_user.incomes.where(recurring: true)
@@ -30,6 +45,6 @@ class ForecastController < ApplicationController
     @projected_balance = @projected_income - @projected_total
 
     # Chart data
-    @forecast_chart_data = @projected_by_category.map { |cat, amt| [cat, amt.to_f] }.to_h
+    @forecast_chart_data = @projected_by_category.map { |(name, _color), amt| [name, amt.to_f] }.to_h
   end
 end

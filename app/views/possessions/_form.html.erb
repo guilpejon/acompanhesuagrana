@@ -1,0 +1,81 @@
+<%= form_with model: possession, class: "space-y-4" do |f| %>
+  <% if possession.errors.any? %>
+    <div class="px-4 py-3 rounded-lg border text-sm" style="background-color: rgba(255,107,107,0.1); border-color: #FF6B6B; color: #FF6B6B;">
+      <% possession.errors.full_messages.each do |msg| %><p><%= msg %></p><% end %>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="block text-xs font-medium mb-1.5" style="color: #8892A4;">Name *</label>
+      <%= f.text_field :name, class: "w-full px-3 py-2.5 rounded-lg border text-sm outline-none transition-all", style: "background-color: #0F1117; border-color: #2A2F45; color: #E2E8F0;", placeholder: "e.g. Honda Civic", autofocus: true %>
+    </div>
+    <div>
+      <label class="block text-xs font-medium mb-1.5" style="color: #8892A4;">Type *</label>
+      <%= f.select :possession_type,
+          [["Vehicle", "vehicle"], ["Electronics", "electronics"], ["Real Estate", "real_estate"],
+           ["Furniture", "furniture"], ["Jewelry", "jewelry"], ["Other", "other"]],
+          {},
+          class: "w-full px-3 py-2.5 rounded-lg border text-sm outline-none transition-all",
+          style: "background-color: #0F1117; border-color: #2A2F45; color: #E2E8F0;" %>
+    </div>
+  </div>
+
+  <div>
+    <label class="block text-xs font-medium mb-1.5" style="color: #8892A4;">Color</label>
+    <div class="flex flex-wrap gap-2">
+      <% Possession::COLORS.each do |color| %>
+        <label class="cursor-pointer">
+          <%= f.radio_button :color, color, class: "sr-only peer" %>
+          <span class="block w-8 h-8 rounded-lg peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-offset-[#1E2130] peer-checked:ring-white transition-all"
+                style="background-color: <%= color %>;"></span>
+        </label>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="block text-xs font-medium mb-1.5" style="color: #8892A4;">Purchase Price</label>
+      <%= f.number_field :purchase_price, step: "0.01", min: "0", class: "w-full px-3 py-2.5 rounded-lg border text-sm outline-none transition-all", style: "background-color: #0F1117; border-color: #2A2F45; color: #E2E8F0;", placeholder: "0.00" %>
+    </div>
+    <div>
+      <label class="block text-xs font-medium mb-1.5" style="color: #8892A4;">Current Value</label>
+      <%= f.number_field :current_value, step: "0.01", min: "0", class: "w-full px-3 py-2.5 rounded-lg border text-sm outline-none transition-all", style: "background-color: #0F1117; border-color: #2A2F45; color: #E2E8F0;", placeholder: "0.00" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="block text-xs font-medium mb-1.5" style="color: #8892A4;">Purchase Date</label>
+      <div class="relative">
+        <%= f.date_field :purchase_date,
+            type: "text",
+            class: "w-full pl-3 pr-9 py-2.5 rounded-lg border text-sm outline-none transition-all",
+            style: "background-color: #0F1117; border-color: #2A2F45; color: #E2E8F0;",
+            data: { controller: "datepicker" } %>
+        <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style="color: #8892A4;">
+          <%= svg_icon "calendar", css_class: "w-4 h-4" %>
+        </span>
+      </div>
+    </div>
+    <div>
+      <label class="block text-xs font-medium mb-1.5" style="color: #8892A4;">Currency</label>
+      <%= f.select :currency,
+          [["BRL (R$)", "BRL"], ["USD ($)", "USD"], ["EUR (€)", "EUR"]],
+          {},
+          class: "w-full px-3 py-2.5 rounded-lg border text-sm outline-none transition-all",
+          style: "background-color: #0F1117; border-color: #2A2F45; color: #E2E8F0;" %>
+    </div>
+  </div>
+
+  <div>
+    <label class="block text-xs font-medium mb-1.5" style="color: #8892A4;">Notes</label>
+    <%= f.text_area :notes, rows: 3, class: "w-full px-3 py-2.5 rounded-lg border text-sm outline-none transition-all resize-none", style: "background-color: #0F1117; border-color: #2A2F45; color: #E2E8F0;", placeholder: "Optional notes about this item..." %>
+  </div>
+
+  <div class="flex gap-3 pt-2">
+    <%= f.submit possession.new_record? ? "Add Possession" : "Update Possession", class: "flex-1 py-2.5 rounded-lg text-sm font-semibold cursor-pointer transition-colors hover:opacity-90", style: "background-color: #6C63FF; color: white;" %>
+    <%= link_to "Cancel", possessions_path, class: "px-4 py-2.5 rounded-lg text-sm font-medium transition-colors hover:bg-white/5", style: "color: #8892A4;" %>
+  </div>
+<% end %>

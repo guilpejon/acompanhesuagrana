@@ -10,11 +10,17 @@ class User < ApplicationRecord
   has_many :credit_cards, dependent: :destroy
   has_many :investments, dependent: :destroy
   has_many :bank_accounts, dependent: :destroy
+  has_many :payees, dependent: :destroy
+  has_many :possessions, dependent: :destroy
 
   after_create :create_default_categories
 
   def currency_symbol
-    currency == "BRL" ? "R$" : "$"
+    case currency
+    when "BRL" then "R$"
+    when "EUR" then "€"
+    else "$"
+    end
   end
 
   private
@@ -30,7 +36,7 @@ class User < ApplicationRecord
       { name: "Education",     color: "#60A5FA", icon: "book-open" },
       { name: "Utilities",     color: "#FBBF24", icon: "zap" },
       { name: "Travel",        color: "#F472B6", icon: "plane" },
-      { name: "Other",         color: "#8892A4", icon: "circle-dollar-sign" }
+      { name: "Other",         color: "#8892A4", icon: "layers" }
     ]
 
     default_categories.each do |cat|

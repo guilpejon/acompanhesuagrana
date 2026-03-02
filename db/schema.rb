@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_01_200000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_01_232156) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -64,6 +64,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_200000) do
     t.string "expense_type", default: "variable", null: false
     t.string "installment_group_id"
     t.integer "installment_number", default: 1, null: false
+    t.bigint "payee_id"
     t.string "payment_method", default: "cash", null: false
     t.integer "recurrence_day"
     t.boolean "recurring", default: false
@@ -72,6 +73,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_200000) do
     t.bigint "user_id", null: false
     t.index ["category_id"], name: "index_expenses_on_category_id"
     t.index ["credit_card_id"], name: "index_expenses_on_credit_card_id"
+    t.index ["payee_id"], name: "index_expenses_on_payee_id"
     t.index ["user_id"], name: "index_expenses_on_user_id"
   end
 
@@ -103,6 +105,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_200000) do
     t.index ["user_id"], name: "index_investments_on_user_id"
   end
 
+  create_table "payees", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_payees_on_user_id"
+  end
+
+  create_table "possessions", force: :cascade do |t|
+    t.string "color", default: "#6C63FF"
+    t.datetime "created_at", null: false
+    t.string "currency", default: "BRL"
+    t.decimal "current_value", precision: 10, scale: 2
+    t.string "name", null: false
+    t.text "notes"
+    t.string "possession_type", default: "other", null: false
+    t.date "purchase_date"
+    t.decimal "purchase_price", precision: 10, scale: 2
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_possessions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "currency"
@@ -122,7 +147,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_200000) do
   add_foreign_key "credit_cards", "users"
   add_foreign_key "expenses", "categories"
   add_foreign_key "expenses", "credit_cards"
+  add_foreign_key "expenses", "payees"
   add_foreign_key "expenses", "users"
   add_foreign_key "incomes", "users"
   add_foreign_key "investments", "users"
+  add_foreign_key "payees", "users"
+  add_foreign_key "possessions", "users"
 end

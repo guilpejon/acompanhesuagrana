@@ -1,0 +1,139 @@
+<div class="space-y-5">
+  <div class="flex items-center justify-between">
+    <h1 class="text-xl font-bold" style="color: #E2E8F0;">Possessions</h1>
+    <%= link_to new_possession_path, class: "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors hover:opacity-90", style: "background-color: #6C63FF; color: white;" do %>
+      <%= svg_icon "plus", css_class: "w-4 h-4", stroke: "white" %>
+      Add Possession
+    <% end %>
+  </div>
+
+  <%# Summary cards %>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="rounded-xl border p-4" style="background-color: #1E2130; border-color: #2A2F45;">
+      <p class="text-xs font-medium uppercase tracking-wide mb-2" style="color: #8892A4;">Total Items</p>
+      <p class="text-lg font-bold" style="color: #E2E8F0;"><%= @possessions.count %></p>
+    </div>
+    <div class="rounded-xl border p-4" style="background-color: #1E2130; border-color: #2A2F45;">
+      <p class="text-xs font-medium uppercase tracking-wide mb-2" style="color: #8892A4;">Total Purchase Value</p>
+      <p class="text-lg font-bold" style="color: #E2E8F0;"><%= format_currency(@total_purchase_value) %></p>
+    </div>
+    <div class="rounded-xl border p-4" style="background-color: #1E2130; border-color: #2A2F45;">
+      <p class="text-xs font-medium uppercase tracking-wide mb-2" style="color: #8892A4;">Total Current Value</p>
+      <p class="text-lg font-bold" style="color: #6C63FF;"><%= format_currency(@total_current_value) %></p>
+    </div>
+    <div class="rounded-xl border p-4" style="background-color: #1E2130; border-color: #2A2F45;">
+      <p class="text-xs font-medium uppercase tracking-wide mb-2" style="color: #8892A4;">Net Gain / Loss</p>
+      <p class="text-lg font-bold" style="color: <%= @net_change >= 0 ? '#00D4AA' : '#FF6B6B' %>;"><%= format_currency(@net_change) %></p>
+    </div>
+  </div>
+
+  <%# Possessions by type %>
+  <% if @possessions.any? %>
+    <% @by_type.each do |type, items| %>
+      <div class="rounded-xl border overflow-hidden" style="background-color: #1E2130; border-color: #2A2F45;">
+        <div class="px-4 py-3 border-b" style="border-color: #2A2F45; background-color: rgba(42,47,69,0.4);">
+          <h2 class="text-sm font-semibold capitalize" style="color: #E2E8F0;">
+            <%= type.tr("_", " ").capitalize %>
+            <span class="ml-2 text-xs font-normal" style="color: #8892A4;"><%= items.count %></span>
+          </h2>
+        </div>
+
+        <%# Table header %>
+        <div class="hidden md:grid grid-cols-6 gap-3 px-4 py-2 text-xs font-medium uppercase tracking-wide border-b" style="color: #8892A4; border-color: #2A2F45;">
+          <div class="col-span-2">Name</div>
+          <div class="text-right">Purchase Price</div>
+          <div class="text-right">Current Value</div>
+          <div class="text-right">Gain / Loss</div>
+          <div class="text-right">Actions</div>
+        </div>
+
+        <div class="divide-y" style="border-color: #2A2F45;">
+          <% items.each do |possession| %>
+            <% change = possession.value_change %>
+            <% change_pct = possession.value_change_percent %>
+            <div class="px-4 py-3 hover:bg-white/[0.02] transition-colors">
+              <div class="flex items-center justify-between md:grid md:grid-cols-6 md:gap-3">
+                <%# Name %>
+                <div class="col-span-2 flex items-center gap-2 min-w-0">
+                  <div class="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center" style="background-color: <%= possession.color %>22;">
+                    <%= svg_icon "layers", css_class: "w-4 h-4", stroke: possession.color %>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-sm font-medium truncate" style="color: #E2E8F0;"><%= possession.name %></p>
+                    <% if possession.purchase_date %>
+                      <p class="text-xs md:hidden" style="color: #8892A4;"><%= possession.purchase_date.strftime("%d %b %Y") %></p>
+                    <% end %>
+                  </div>
+                </div>
+
+                <%# Mobile: current value %>
+                <div class="md:hidden flex flex-col items-end gap-0.5">
+                  <span class="text-sm font-semibold" style="color: #E2E8F0;"><%= possession.current_value ? format_currency(possession.current_value) : "—" %></span>
+                  <% if change %>
+                    <span class="text-xs" style="color: <%= change >= 0 ? '#00D4AA' : '#FF6B6B' %>;">
+                      <%= change >= 0 ? "+" : "" %><%= format_currency(change) %>
+                    </span>
+                  <% end %>
+                </div>
+
+                <%# Desktop columns %>
+                <div class="hidden md:block text-right">
+                  <span class="text-sm" style="color: #8892A4;"><%= possession.purchase_price ? format_currency(possession.purchase_price) : "—" %></span>
+                </div>
+                <div class="hidden md:block text-right">
+                  <span class="text-sm font-semibold" style="color: #E2E8F0;"><%= possession.current_value ? format_currency(possession.current_value) : "—" %></span>
+                </div>
+                <div class="hidden md:block text-right">
+                  <% if change %>
+                    <span class="text-sm font-semibold" style="color: <%= change >= 0 ? '#00D4AA' : '#FF6B6B' %>;">
+                      <%= change >= 0 ? "+" : "" %><%= format_currency(change) %>
+                    </span>
+                    <% if change_pct %>
+                      <p class="text-xs" style="color: #8892A4;"><%= change >= 0 ? "+" : "" %><%= change_pct %>%</p>
+                    <% end %>
+                  <% else %>
+                    <span class="text-sm" style="color: #8892A4;">—</span>
+                  <% end %>
+                </div>
+                <div class="hidden md:flex items-center justify-end gap-1">
+                  <%= link_to edit_possession_path(possession), class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors", style: "color: #8892A4;" do %>
+                    <%= svg_icon "edit", css_class: "w-3.5 h-3.5" %>
+                  <% end %>
+                  <%= button_to possession_path(possession), method: :delete,
+                      form: { data: { turbo_confirm: "Remove this possession?" } },
+                      class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors",
+                      style: "color: #8892A4; background: none; border: none; cursor: pointer;" do %>
+                    <%= svg_icon "trash-2", css_class: "w-3.5 h-3.5" %>
+                  <% end %>
+                </div>
+              </div>
+
+              <%# Mobile actions %>
+              <div class="flex items-center justify-end gap-1 mt-1 md:hidden">
+                <%= link_to edit_possession_path(possession), class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors", style: "color: #8892A4;" do %>
+                  <%= svg_icon "edit", css_class: "w-3.5 h-3.5" %>
+                <% end %>
+                <%= button_to possession_path(possession), method: :delete,
+                    form: { data: { turbo_confirm: "Remove this possession?" } },
+                    class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors",
+                    style: "color: #8892A4; background: none; border: none; cursor: pointer;" do %>
+                  <%= svg_icon "trash-2", css_class: "w-3.5 h-3.5" %>
+                <% end %>
+              </div>
+
+              <% if possession.notes.present? %>
+                <p class="mt-1.5 text-xs" style="color: #8892A4;"><%= possession.notes %></p>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="rounded-xl border flex flex-col items-center justify-center py-16 gap-3" style="background-color: #1E2130; border-color: #2A2F45;">
+      <%= svg_icon "layers", css_class: "w-12 h-12 opacity-20", stroke: "#8892A4" %>
+      <p class="text-sm font-medium" style="color: #8892A4;">No possessions added yet</p>
+      <%= link_to "Add your first possession", new_possession_path, class: "text-sm font-medium hover:opacity-80", style: "color: #6C63FF;" %>
+    </div>
+  <% end %>
+</div>

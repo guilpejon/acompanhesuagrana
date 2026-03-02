@@ -3,7 +3,7 @@ class ExpensesController < ApplicationController
 
   def index
     @expenses = current_user.expenses
-      .includes(:category, :credit_card)
+      .includes(:category, :credit_card, :payee)
       .for_month(@current_date)
       .ordered
 
@@ -21,6 +21,7 @@ class ExpensesController < ApplicationController
   end
 
   def create
+    resolve_payee!
     total_installments = expense_params[:total_installments].to_i.clamp(1, 60)
 
     if total_installments > 1
@@ -41,7 +42,9 @@ class ExpensesController < ApplicationController
   end
 
   def update
+    resolve_payee!
     if @expense.update(expense_params)
+      propagate_payee_to_installment_group!
       redirect_to expenses_path, notice: "Expense updated."
     else
       @categories = current_user.categories.order(:name)
@@ -68,8 +71,29 @@ class ExpensesController < ApplicationController
     params.require(:expense).permit(
       :description, :amount, :date, :expense_type, :category_id, :credit_card_id,
       :recurring, :recurrence_day, :payment_method, :total_installments,
-      :installment_number, :installment_group_id
+      :installment_number, :installment_group_id, :payee_id
     )
+  end
+
+  def resolve_payee!
+    name = params.dig(:expense, :payee_name).to_s.strip
+    payee_id = params.dig(:expense, :payee_id).to_s.strip
+
+    return if name.blank?
+
+    if payee_id.blank?
+      payee = current_user.payees.find_or_create_by!(name: name)
+      params[:expense][:payee_id] = payee.id
+    end
+  end
+
+  def propagate_payee_to_installment_group!
+    return if @expense.installment_group_id.blank?
+
+    current_user.expenses
+      .where(installment_group_id: @expense.installment_group_id)
+      .where.not(id: @expense.id)
+      .update_all(payee_id: @expense.payee_id)
   end
 
   def render_new_with_collections

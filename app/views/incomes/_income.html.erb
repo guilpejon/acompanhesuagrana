@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <span class="text-sm font-semibold flex-shrink-0" style="color: #00D4AA;"><%= format_brl(income.amount) %></span>
+  <span class="text-sm font-semibold flex-shrink-0" style="color: #00D4AA;"><%= format_currency(income.amount) %></span>
 
   <div class="flex items-center gap-1">
     <%= link_to edit_income_path(income), class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors", style: "color: #8892A4;" do %>

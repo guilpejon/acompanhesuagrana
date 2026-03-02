@@ -63,6 +63,26 @@
     </div>
   </div>
 
+  <%# Payee %>
+  <div class="relative" data-controller="payee-autocomplete">
+    <label class="block text-xs font-medium mb-1.5" style="color: #8892A4;">Payee</label>
+    <%= hidden_field_tag "expense[payee_id]", expense.payee_id,
+        data: { payee_autocomplete_target: "payeeId" } %>
+    <input type="text" name="expense[payee_name]"
+           value="<%= expense.payee&.name %>"
+           placeholder="Search or create payee..."
+           autocomplete="off"
+           data-payee-autocomplete-target="payeeName"
+           data-action="input->payee-autocomplete#search"
+           class="w-full px-3 py-2.5 rounded-lg border text-sm outline-none focus:ring-2 transition-all"
+           style="background-color: #0F1117; border-color: #2A2F45; color: #E2E8F0;" />
+    <div data-payee-autocomplete-target="dropdown"
+         style="display:none; position:absolute; z-index:50; top:100%; left:0; right:0;
+                background:#1E2130; border:1px solid #2A2F45; border-radius:0.5rem;
+                max-height:200px; overflow-y:auto;">
+    </div>
+  </div>
+
   <%# Description %>
   <div>
     <label class="block text-xs font-medium mb-1.5" style="color: #8892A4;">Description</label>

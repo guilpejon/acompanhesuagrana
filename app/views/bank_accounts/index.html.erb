@@ -36,15 +36,15 @@
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
     <div class="rounded-xl border p-4" style="background-color: #1E2130; border-color: #2A2F45;">
       <p class="text-xs font-medium uppercase tracking-wide mb-2" style="color: #8892A4;">Total Balance</p>
-      <p class="text-lg font-bold" style="color: #E2E8F0;"><%= format_brl(@total_balance) %></p>
+      <p class="text-lg font-bold" style="color: #E2E8F0;"><%= format_currency(@total_balance) %></p>
     </div>
     <div class="rounded-xl border p-4" style="background-color: #1E2130; border-color: #2A2F45;">
       <p class="text-xs font-medium uppercase tracking-wide mb-2" style="color: #8892A4;">Est. Monthly Interest</p>
-      <p class="text-lg font-bold" style="color: #00D4AA;"><%= format_brl(@total_monthly_interest) %></p>
+      <p class="text-lg font-bold" style="color: #00D4AA;"><%= format_currency(@total_monthly_interest) %></p>
     </div>
     <div class="rounded-xl border p-4" style="background-color: #1E2130; border-color: #2A2F45;">
       <p class="text-xs font-medium uppercase tracking-wide mb-2" style="color: #8892A4;">Est. Yearly Interest</p>
-      <p class="text-lg font-bold" style="color: #00D4AA;"><%= format_brl(@total_yearly_interest) %></p>
+      <p class="text-lg font-bold" style="color: #00D4AA;"><%= format_currency(@total_yearly_interest) %></p>
     </div>
   </div>
 
@@ -83,7 +83,7 @@
 
                 <%# Mobile: show balance %>
                 <div class="md:hidden flex flex-col items-end gap-0.5">
-                  <span class="text-sm font-semibold" style="color: #E2E8F0;"><%= format_brl(account.balance) %></span>
+                  <span class="text-sm font-semibold" style="color: #E2E8F0;"><%= format_currency(account.balance) %></span>
                   <% if account.cdi_percentage? %>
                     <span class="text-xs" style="color: #00D4AA;"><%= number_with_precision(account.cdi_multiplier, precision: 0) %>% CDI</span>
                   <% elsif account.interest_rate > 0 %>
@@ -96,7 +96,7 @@
                   <span class="text-sm" style="color: #8892A4;"><%= account.bank_name.presence || "—" %></span>
                 </div>
                 <div class="hidden md:block text-right">
-                  <span class="text-sm font-semibold" style="color: #E2E8F0;"><%= format_brl(account.balance) %></span>
+                  <span class="text-sm font-semibold" style="color: #E2E8F0;"><%= format_currency(account.balance) %></span>
                 </div>
                 <div class="hidden md:block text-right">
                   <% if account.cdi_percentage? %>
