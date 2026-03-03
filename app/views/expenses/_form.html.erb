@@ -45,7 +45,7 @@
   <%# Category %>
   <div>
     <label class="block text-xs font-medium mb-2" style="color: #8892A4;"><%= t("expenses.form.category") %></label>
-    <div class="grid grid-cols-4 gap-2">
+    <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
       <% categories.each do |cat| %>
         <label class="cursor-pointer">
           <%= f.radio_button :category_id, cat.id, class: "sr-only peer", id: "cat_#{cat.id}" %>

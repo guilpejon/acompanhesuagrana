@@ -24,7 +24,7 @@ export default class extends Controller {
     const overlay = this.overlayTarget
 
     panel.classList.add("hidden")
-    panel.classList.remove("flex", "fixed", "inset-y-0", "left-0", "z-30", "flex-col")
+    panel.classList.remove("flex", "fixed", "inset-y-0", "left-0", "z-50", "flex-col")
     panel.style.width = ""
     overlay.classList.add("hidden")
   }
@@ -42,7 +42,7 @@ export default class extends Controller {
 
     if (panel.classList.contains("hidden")) {
       panel.classList.remove("hidden")
-      panel.classList.add("flex", "fixed", "inset-y-0", "left-0", "z-30", "flex-col")
+      panel.classList.add("flex", "fixed", "inset-y-0", "left-0", "z-50", "flex-col")
       panel.style.width = "240px"
       overlay.classList.remove("hidden")
     } else {

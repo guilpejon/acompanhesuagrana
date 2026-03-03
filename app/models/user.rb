@@ -53,6 +53,7 @@ class User < ApplicationRecord
   private
 
   def create_default_categories
+    # All colours must be members of ColorPalette::COLORS
     default_categories = [
       { name: "Housing",       color: "#6C63FF", icon: "home" },
       { name: "Food",          color: "#00D4AA", icon: "utensils" },

@@ -3,9 +3,9 @@
   <div class="flex items-center justify-between">
     <h1 class="text-xl font-bold" style="color: #E2E8F0;"><%= t("bank_accounts.index.title") %></h1>
     <div class="flex items-center gap-2">
-      <%= link_to new_bank_account_path, class: "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors hover:opacity-90", style: "background-color: #6C63FF; color: white;" do %>
+      <%= link_to new_bank_account_path, class: "flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-semibold transition-colors hover:opacity-90", style: "background-color: #6C63FF; color: white;" do %>
         <%= svg_icon "plus", css_class: "w-4 h-4", stroke: "white" %>
-        <%= t("bank_accounts.index.add") %>
+        <span class="hidden sm:inline"><%= t("bank_accounts.index.add") %></span>
       <% end %>
     </div>
   </div>

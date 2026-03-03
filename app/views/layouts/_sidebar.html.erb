@@ -14,18 +14,32 @@
 
   <%# Navigation %>
   <% month_param = @current_date&.strftime('%Y-%m') %>
-  <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-    <%= render "layouts/nav_item", icon: "home", label: t("layouts.sidebar.dashboard"), path: root_path(month: month_param), active: controller_name == "dashboard" %>
-    <%= render "layouts/nav_item", icon: "credit-card", label: t("layouts.sidebar.expenses"), path: expenses_path(month: month_param), active: controller_name == "expenses" %>
-    <%= render "layouts/nav_item", icon: "wallet", label: t("layouts.sidebar.income"), path: incomes_path(month: month_param), active: controller_name == "incomes" %>
-    <%= render "layouts/nav_item", icon: "credit-card", label: t("layouts.sidebar.credit_cards"), path: credit_cards_path(month: month_param), active: controller_name == "credit_cards" %>
-    <%= render "layouts/nav_item", icon: "landmark", label: t("layouts.sidebar.bank_accounts"), path: bank_accounts_path(month: month_param), active: controller_name == "bank_accounts" %>
-    <%= render "layouts/nav_item", icon: "trending-up", label: t("layouts.sidebar.investments"), path: investments_path(month: month_param), active: controller_name == "investments" %>
-    <%= render "layouts/nav_item", icon: "layers", label: t("layouts.sidebar.possessions"), path: possessions_path, active: controller_name == "possessions" %>
-    <%= render "layouts/nav_item", icon: "bar-chart-2", label: t("layouts.sidebar.forecast"), path: forecast_path(month: month_param), active: controller_name == "forecast" %>
-    <%= render "layouts/nav_item", icon: "tag", label: t("layouts.sidebar.categories"), path: categories_path(month: month_param), active: controller_name == "categories" %>
-    <%= render "layouts/nav_item", icon: "user", label: t("layouts.sidebar.payees"), path: payees_path, active: controller_name == "payees" %>
-    <%= render "layouts/nav_item", icon: "settings", label: t("layouts.sidebar.settings"), path: edit_user_settings_path, active: controller_name == "settings" %>
+  <nav class="flex-1 overflow-y-auto px-3 py-4">
+    <%# Overview %>
+    <p class="px-3 mb-1 text-xs font-semibold uppercase tracking-wider" style="color: #4A5568;" data-sidebar-target="label"><%= t("layouts.sidebar.section_overview") %></p>
+    <div class="space-y-1 mb-4">
+      <%= render "layouts/nav_item", icon: "home", label: t("layouts.sidebar.dashboard"), path: root_path(month: month_param), active: controller_name == "dashboard" %>
+      <%= render "layouts/nav_item", icon: "bar-chart-2", label: t("layouts.sidebar.forecast"), path: forecast_path(month: month_param), active: controller_name == "forecast" %>
+    </div>
+
+    <%# Finances %>
+    <p class="px-3 mb-1 text-xs font-semibold uppercase tracking-wider" style="color: #4A5568;" data-sidebar-target="label"><%= t("layouts.sidebar.section_finances") %></p>
+    <div class="space-y-1 mb-4">
+      <%= render "layouts/nav_item", icon: "credit-card", label: t("layouts.sidebar.expenses"), path: expenses_path(month: month_param), active: controller_name == "expenses" %>
+      <%= render "layouts/nav_item", icon: "wallet", label: t("layouts.sidebar.income"), path: incomes_path(month: month_param), active: controller_name == "incomes" %>
+      <%= render "layouts/nav_item", icon: "landmark", label: t("layouts.sidebar.bank_accounts"), path: bank_accounts_path(month: month_param), active: controller_name == "bank_accounts" %>
+      <%= render "layouts/nav_item", icon: "trending-up", label: t("layouts.sidebar.investments"), path: investments_path(month: month_param), active: controller_name == "investments" %>
+      <%= render "layouts/nav_item", icon: "layers", label: t("layouts.sidebar.possessions"), path: possessions_path, active: controller_name == "possessions" %>
+    </div>
+
+    <%# Manage %>
+    <p class="px-3 mb-1 text-xs font-semibold uppercase tracking-wider" style="color: #4A5568;" data-sidebar-target="label"><%= t("layouts.sidebar.section_manage") %></p>
+    <div class="space-y-1">
+      <%= render "layouts/nav_item", icon: "credit-card", label: t("layouts.sidebar.credit_cards"), path: credit_cards_path(month: month_param), active: controller_name == "credit_cards" %>
+      <%= render "layouts/nav_item", icon: "tag", label: t("layouts.sidebar.categories"), path: categories_path(month: month_param), active: controller_name == "categories" %>
+      <%= render "layouts/nav_item", icon: "user", label: t("layouts.sidebar.payees"), path: payees_path, active: controller_name == "payees" %>
+      <%= render "layouts/nav_item", icon: "settings", label: t("layouts.sidebar.settings"), path: edit_user_settings_path, active: controller_name == "settings" %>
+    </div>
   </nav>
 
   <%# User section %>

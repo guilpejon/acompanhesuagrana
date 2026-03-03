@@ -6,7 +6,7 @@ class CategoriesController < ApplicationController
   end
 
   def new
-    @category = current_user.categories.build(color: "#6C63FF", icon: "circle-dollar-sign")
+    @category = current_user.categories.build(color: "#6C63FF")
   end
 
   def create

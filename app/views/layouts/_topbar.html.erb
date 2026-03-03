@@ -1,10 +1,10 @@
-<header class="flex h-16 items-center justify-between px-4 md:px-6 border-b flex-shrink-0" style="background-color: #1A1D27; border-color: #2A2F45;">
+<header class="relative flex h-16 items-center px-4 md:px-6 border-b flex-shrink-0" style="background-color: #1A1D27; border-color: #2A2F45;">
   <%# Menu button: mobile=overlay, desktop=collapse sidebar %>
   <button class="p-2 rounded-lg transition-colors hover:bg-white/5" style="color: #8892A4;" data-action="click->sidebar#toggle">
     <%= svg_icon "menu", css_class: "w-5 h-5" %>
   </button>
 
-  <%# Month selector with boundaries %>
+  <%# Month selector with boundaries — absolutely centred so it stays centred on all screen sizes %>
   <% today_month = Date.current.beginning_of_month %>
   <% min_month = today_month - 24.months %>
   <% max_month = @max_date || today_month + 1.month %>
@@ -14,7 +14,7 @@
   <% at_max = @current_date >= max_month %>
   <% on_today = @current_date == today_month %>
 
-  <div class="flex items-center gap-1">
+  <div class="absolute left-1/2 -translate-x-1/2 flex items-center gap-1">
     <% if at_min %>
       <span class="p-1.5 rounded-lg cursor-not-allowed opacity-25" style="color: #8892A4;">
         <%= svg_icon "chevron-left", css_class: "w-4 h-4" %>
@@ -48,8 +48,8 @@
   </div>
 
   <%# Quick Add button — desktop %>
-  <div class="hidden lg:flex items-center gap-3">
-    <%= link_to new_expense_path(quick: true), class: "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors hover:opacity-90", style: "background-color: #6C63FF; color: white;", data: { turbo_frame: "modal_content" }, id: "quick-add-btn" do %>
+  <div class="ml-auto hidden lg:flex items-center gap-3">
+    <%= link_to new_expense_path, class: "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors hover:opacity-90", style: "background-color: #6C63FF; color: white;" do %>
       <%= svg_icon "plus", css_class: "w-4 h-4", stroke: "white" %>
       <%= t("layouts.topbar.add_expense") %>
     <% end %>

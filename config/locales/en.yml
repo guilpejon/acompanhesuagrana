@@ -59,6 +59,9 @@ en:
       payees: "Payees"
       settings: "Settings"
       sign_out: "Sign out"
+      section_overview: "Overview"
+      section_finances: "Finances"
+      section_manage: "Manage"
     topbar:
       back: "Back"
       add_expense: "Add Expense"
@@ -114,7 +117,7 @@ en:
       cash: "Cash"
       pix: "PIX"
       boleto: "Boleto"
-      credit_card: "Credit Card"
+      credit_card: "Card"
       category: "Category *"
       payee: "Payee"
       payee_placeholder: "Search or create payee..."

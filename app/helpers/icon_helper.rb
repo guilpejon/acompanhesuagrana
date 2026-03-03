@@ -43,7 +43,8 @@ module IconHelper
   }.freeze
 
   def svg_icon(name, css_class: "w-5 h-5", stroke: "currentColor", fill: "none")
-    path_data = ICONS[name.to_s] || ICONS["circle-dollar-sign"]
+    path_data = ICONS[name.to_s]
+    return "".html_safe if path_data.nil?
     content = <<~SVG
       <svg xmlns="http://www.w3.org/2000/svg" class="#{css_class}" fill="#{fill}" viewBox="0 0 24 24" stroke="#{stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         #{path_data}

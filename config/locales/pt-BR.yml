@@ -100,6 +100,9 @@ pt-BR:
       payees: "Beneficiários"
       settings: "Configurações"
       sign_out: "Sair"
+      section_overview: "Visão Geral"
+      section_finances: "Finanças"
+      section_manage: "Gerenciar"
     topbar:
       back: "Voltar"
       add_expense: "Adicionar Despesa"
@@ -155,7 +158,7 @@ pt-BR:
       cash: "Dinheiro"
       pix: "PIX"
       boleto: "Boleto"
-      credit_card: "Cartão de Crédito"
+      credit_card: "Cartão"
       category: "Categoria *"
       payee: "Beneficiário"
       payee_placeholder: "Buscar ou criar beneficiário..."

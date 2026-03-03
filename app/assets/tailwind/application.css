@@ -93,6 +93,11 @@ span.flatpickr-weekday {
   fill: #E2E8F0 !important;
 }
 
+/* Give select dropdowns more room for the native arrow */
+select {
+  padding-right: 2rem;
+}
+
 /* Remove number input spinners */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

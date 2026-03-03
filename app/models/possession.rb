@@ -1,6 +1,6 @@
 class Possession < ApplicationRecord
   TYPES = %w[vehicle electronics real_estate furniture jewelry other].freeze
-  COLORS = BankAccount::COLORS
+  COLORS = ColorPalette::COLORS
 
   belongs_to :user
 

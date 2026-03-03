@@ -21,16 +21,16 @@
               <p class="text-sm font-medium" style="color: #E2E8F0;" data-payee-inline-edit-target="name"><%= payee.name %></p>
               <div class="flex items-center gap-1">
                 <button type="button"
-                        class="p-1.5 rounded-lg hover:bg-white/5 transition-colors"
+                        class="p-2 rounded-lg hover:bg-white/5 transition-colors"
                         style="color: #8892A4;"
                         data-action="click->payee-inline-edit#edit">
-                  <%= svg_icon "edit", css_class: "w-3.5 h-3.5" %>
+                  <%= svg_icon "edit", css_class: "w-4 h-4" %>
                 </button>
                 <%= button_to payee_path(payee), method: :delete,
                     form: { data: { turbo_confirm: t("payees.index.delete_confirm") } },
                     class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors",
                     style: "color: #8892A4; background: none; border: none; cursor: pointer;" do %>
-                  <%= svg_icon "trash-2", css_class: "w-3.5 h-3.5" %>
+                  <%= svg_icon "trash-2", css_class: "w-4 h-4" %>
                 <% end %>
               </div>
             </div>
@@ -44,16 +44,16 @@
                      data-action="keydown.enter->payee-inline-edit#save keydown.escape->payee-inline-edit#cancel" />
               <div class="flex items-center gap-1 mt-1.5">
                 <button type="button"
-                        class="p-1.5 rounded-lg hover:bg-white/5 transition-colors"
+                        class="p-2 rounded-lg hover:bg-white/5 transition-colors"
                         style="color: #00D4AA;"
                         data-action="click->payee-inline-edit#save">
-                  <%= svg_icon "check", css_class: "w-3.5 h-3.5" %>
+                  <%= svg_icon "check", css_class: "w-4 h-4" %>
                 </button>
                 <button type="button"
-                        class="p-1.5 rounded-lg hover:bg-white/5 transition-colors"
+                        class="p-2 rounded-lg hover:bg-white/5 transition-colors"
                         style="color: #8892A4;"
                         data-action="click->payee-inline-edit#cancel">
-                  <%= svg_icon "x", css_class: "w-3.5 h-3.5" %>
+                  <%= svg_icon "x", css_class: "w-4 h-4" %>
                 </button>
               </div>
             </div>

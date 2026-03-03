@@ -7,11 +7,11 @@
           class: "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-white/5",
           style: "background-color: #1E2130; border: 1px solid #2A2F45; color: #8892A4; cursor: pointer;" do %>
         <%= svg_icon "refresh-cw", css_class: "w-4 h-4" %>
-        <%= t("investments.index.refresh_prices") %>
+        <span class="hidden sm:inline"><%= t("investments.index.refresh_prices") %></span>
       <% end %>
-      <%= link_to new_investment_path, class: "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors hover:opacity-90", style: "background-color: #6C63FF; color: white;" do %>
+      <%= link_to new_investment_path, class: "flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-semibold transition-colors hover:opacity-90", style: "background-color: #6C63FF; color: white;" do %>
         <%= svg_icon "plus", css_class: "w-4 h-4", stroke: "white" %>
-        <%= t("investments.index.add") %>
+        <span class="hidden sm:inline"><%= t("investments.index.add") %></span>
       <% end %>
     </div>
   </div>

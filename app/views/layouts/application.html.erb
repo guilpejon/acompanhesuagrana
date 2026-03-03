@@ -43,7 +43,7 @@
         <%= render "layouts/sidebar" %>
 
         <%# Mobile overlay %>
-        <div class="fixed inset-0 z-20 hidden" style="background-color: rgba(0,0,0,0.5);" data-sidebar-target="overlay" data-action="click->sidebar#close"></div>
+        <div class="fixed inset-0 z-40 hidden" style="background-color: rgba(0,0,0,0.5);" data-sidebar-target="overlay" data-action="click->sidebar#close"></div>
 
         <%# Main content area %>
         <div class="flex flex-col flex-1 min-w-0 lg:ml-60" data-sidebar-target="content">
@@ -91,20 +91,25 @@
           <% end %>
         </nav>
 
-        <%# Quick Add FAB — mobile only %>
-        <button class="fixed bottom-20 right-4 z-40 w-12 h-12 rounded-full flex items-center justify-center shadow-lg lg:hidden transition-transform hover:scale-110 active:scale-95"
-                style="background-color: #6C63FF;"
-                data-action="click->modal#open"
-                data-modal-url-value="<%= new_expense_path(quick: true) %>">
-          <%= svg_icon "plus", css_class: "w-6 h-6", stroke: "white" %>
-        </button>
-      </div>
-
-      <%# Global modal container %>
-      <div id="modal" data-controller="modal" data-modal-target="container" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background-color: rgba(0,0,0,0.7);">
-        <div class="relative w-full max-w-md rounded-xl border p-6" style="background-color: #1E2130; border-color: #2A2F45;" data-modal-target="dialog">
-          <div id="modal-content"></div>
-        </div>
+        <%# Quick Add FAB — mobile only, context-aware per section %>
+        <% fab_path = {
+          "expenses"      => new_expense_path,
+          "incomes"       => new_income_path,
+          "credit_cards"  => new_credit_card_path,
+          "bank_accounts" => new_bank_account_path,
+          "investments"   => new_investment_path,
+          "possessions"   => new_possession_path,
+          "categories"    => new_category_path,
+          "payees"        => new_payee_path,
+        }.fetch(controller_name, new_expense_path) %>
+        <% show_fab = !action_name.in?(%w[new edit create update]) && controller_name != "forecast" %>
+        <% if show_fab %>
+          <%= link_to fab_path,
+                class: "fixed bottom-20 right-4 z-40 w-12 h-12 rounded-full flex items-center justify-center shadow-lg lg:hidden transition-transform hover:scale-110 active:scale-95",
+                style: "background-color: #6C63FF;" do %>
+            <%= svg_icon "plus", css_class: "w-6 h-6", stroke: "white" %>
+          <% end %>
+        <% end %>
       </div>
 
     <% else %>

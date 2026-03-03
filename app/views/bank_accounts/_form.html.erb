@@ -61,7 +61,7 @@
   <div>
     <label class="block text-xs font-medium mb-1.5" style="color: #8892A4;"><%= t("bank_accounts.form.color") %></label>
     <div class="flex flex-wrap gap-2">
-      <% BankAccount::COLORS.each do |color| %>
+      <% ColorPalette::COLORS.each do |color| %>
         <label class="cursor-pointer">
           <%= f.radio_button :color, color, class: "sr-only peer" %>
           <span class="block w-8 h-8 rounded-lg peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-offset-[#1E2130] peer-checked:ring-white transition-all"

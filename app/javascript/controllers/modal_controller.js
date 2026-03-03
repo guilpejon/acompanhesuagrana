@@ -9,6 +9,9 @@ export default class extends Controller {
 
   open(event) {
     event.preventDefault()
+    if (this.isOpen) return
+    this.isOpen = true
+
     const url = event.currentTarget.dataset.modalUrlValue ||
                 event.currentTarget.getAttribute("href") ||
                 event.params?.url
@@ -22,11 +25,14 @@ export default class extends Controller {
         document.getElementById("modal-content").innerHTML = html
         this.show()
       })
+      .catch(() => { this.isOpen = false })
+    } else {
+      this.isOpen = false
     }
   }
 
   show() {
-    this.element.classList.remove("hidden")
+    this.containerTarget.classList.remove("hidden")
     document.addEventListener("keydown", this.boundHandleKeydown)
     document.body.style.overflow = "hidden"
   }
@@ -34,13 +40,14 @@ export default class extends Controller {
   close(event) {
     if (event) {
       // Only close if clicking the backdrop itself
-      if (event.target !== this.element) return
+      if (event.target !== this.containerTarget) return
     }
     this.hide()
   }
 
   hide() {
-    this.element.classList.add("hidden")
+    this.isOpen = false
+    this.containerTarget.classList.add("hidden")
     document.getElementById("modal-content").innerHTML = ""
     document.removeEventListener("keydown", this.boundHandleKeydown)
     document.body.style.overflow = ""
