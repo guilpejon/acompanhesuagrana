@@ -21,3 +21,7 @@ production:
     class: Investments::RefreshAllPricesJob
     queue: default
     schedule: at 8:05am every day
+  update_bank_account_daily_interest:
+    class: BankAccounts::UpdateDailyInterestJob
+    queue: default
+    schedule: at 8:10am every day

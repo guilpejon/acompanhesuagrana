@@ -31,4 +31,18 @@ class BankAccount < ApplicationRecord
   def yearly_interest
     balance * effective_rate / 100
   end
+
+  def daily_rate
+    annual = effective_rate
+    return 0.0 if annual <= 0
+
+    (1 + annual / 100.0) ** (1.0 / 252) - 1
+  end
+
+  def apply_daily_interest!
+    rate = daily_rate
+    return if rate <= 0
+
+    update!(balance: (balance * (1 + rate)).round(2))
+  end
 end

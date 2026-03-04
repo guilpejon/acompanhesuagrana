@@ -1,6 +1,10 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker", { scope: "/" });
+}
+
 import Chartkick from "chartkick"
 // window.Chart is the UMD exports object; .Chart is the actual Chart class
 Chartkick.use(window.Chart.Chart)

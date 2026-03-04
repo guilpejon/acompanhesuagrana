@@ -34,4 +34,7 @@ Rails.application.routes.draw do
   get "/locale/:locale", to: "locales#set", as: :set_locale
 
   get "up" => "rails/health#show", as: :rails_health_check
+
+  get "service-worker" => "pwa#service_worker", as: :pwa_service_worker
+  get "manifest" => "pwa#manifest", as: :pwa_manifest
 end
