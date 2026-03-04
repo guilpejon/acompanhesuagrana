@@ -138,6 +138,20 @@ en:
       cancel: "Cancel"
     expense:
       delete_confirm: "Delete this expense?"
+      standard_delete:
+        title: "Delete expense"
+        question: "This action cannot be undone."
+        confirm: "Delete"
+      recurring_delete:
+        title: "Delete recurring expense"
+        question: "Do you want to delete only this occurrence or this and all following ones?"
+        confirm: "Delete only this"
+        this_and_following: "Delete this and following"
+      installment_delete:
+        title: "Delete installment expense"
+        question: "Do you want to delete only this installment or this and all remaining ones?"
+        confirm: "Delete only this"
+        this_and_following: "Delete this and remaining"
     payment_statuses:
       pending: "Not Scheduled"
       scheduled: "Scheduled"
@@ -171,6 +185,15 @@ en:
       cancel: "Cancel"
     income:
       delete_confirm: "Delete this income?"
+      standard_delete:
+        title: "Delete income"
+        question: "This action cannot be undone."
+        confirm: "Delete"
+      recurring_delete:
+        title: "Delete recurring income"
+        question: "Do you want to delete only this occurrence or this and all following ones?"
+        confirm: "Delete only this"
+        this_and_following: "Delete this and following"
 
   credit_cards:
     index:
@@ -183,6 +206,7 @@ en:
       usage: "Usage"
       edit: "Edit"
       delete_confirm: "Remove this card?"
+      delete_modal_title: "Remove card"
       no_cards: "No credit cards added yet"
       add_first: "Add your first card"
     new:
@@ -231,6 +255,8 @@ en:
       actions: "Actions"
       no_accounts: "No bank accounts added yet"
       add_first: "Add your first account"
+      delete_confirm: "Remove this account?"
+      delete_modal_title: "Remove account"
     new:
       title: "Add Bank Account"
     edit:
@@ -280,6 +306,8 @@ en:
       total_value: "Total Value"
       no_investments: "No investments added yet"
       add_first: "Add your first investment"
+      delete_confirm: "Remove this investment?"
+      delete_modal_title: "Remove investment"
     new:
       title: "Add Investment"
       note: "Stock prices are auto-fetched from brapi.dev (Brazilian stocks). Crypto prices from CoinGecko. Use the ticker field to enable auto-price updates."
@@ -306,6 +334,7 @@ en:
       title: "Categories"
       new: "New Category"
       delete_confirm: "Delete this category? Expenses will lose their category."
+      delete_modal_title: "Delete category"
       no_categories: "No categories yet"
     new:
       title: "New Category"
@@ -325,6 +354,7 @@ en:
       title: "Payees"
       new: "New Payee"
       delete_confirm: "Delete this payee?"
+      delete_modal_title: "Delete payee"
       no_payees: "No payees yet"
     new:
       title: "New Payee"
@@ -351,6 +381,7 @@ en:
       gain_loss: "Gain / Loss"
       actions: "Actions"
       delete_confirm: "Remove this possession?"
+      delete_modal_title: "Remove possession"
       no_possessions: "No possessions added yet"
       add_first: "Add your first possession"
     new:
@@ -403,6 +434,16 @@ en:
       installment_expenses: "Installment Expenses"
       credit_card_bills: "Credit Card Bills"
       actuals: "Actuals —"
+      actuals_for: "Actuals for"
+      actual_income: "Actual Income"
+      actual_expenses: "Actual Expenses"
+      actual_balance: "Actual Balance"
+      income_source: "income source"
+      income_sources: "income sources"
+      transactions: "transactions"
+      actual_by_category: "Actual Spending by Category"
+      all_expenses: "All Expenses"
+      no_expenses_month: "No expenses recorded this month"
 
   settings:
     edit:
@@ -433,6 +474,9 @@ en:
       language_es: "Español"
 
   shared:
+    delete_modal:
+      confirm: "Delete"
+      cancel: "Cancel"
     empty_state:
       default: "Nothing here yet"
 

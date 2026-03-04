@@ -179,6 +179,20 @@ es:
       cancel: "Cancelar"
     expense:
       delete_confirm: "¿Eliminar este gasto?"
+      standard_delete:
+        title: "Eliminar gasto"
+        question: "Esta acción no se puede deshacer."
+        confirm: "Eliminar"
+      recurring_delete:
+        title: "Eliminar gasto recurrente"
+        question: "¿Deseas eliminar solo esta ocurrencia o esta y todas las siguientes?"
+        confirm: "Eliminar solo esta"
+        this_and_following: "Eliminar esta y las siguientes"
+      installment_delete:
+        title: "Eliminar gasto en cuotas"
+        question: "¿Deseas eliminar solo esta cuota o esta y todas las restantes?"
+        confirm: "Eliminar solo esta"
+        this_and_following: "Eliminar esta y las restantes"
     payment_statuses:
       pending: "No programado"
       scheduled: "Programado"
@@ -212,6 +226,15 @@ es:
       cancel: "Cancelar"
     income:
       delete_confirm: "¿Eliminar este ingreso?"
+      standard_delete:
+        title: "Eliminar ingreso"
+        question: "Esta acción no se puede deshacer."
+        confirm: "Eliminar"
+      recurring_delete:
+        title: "Eliminar ingreso recurrente"
+        question: "¿Deseas eliminar solo esta ocurrencia o esta y todas las siguientes?"
+        confirm: "Eliminar solo esta"
+        this_and_following: "Eliminar esta y las siguientes"
 
   credit_cards:
     index:
@@ -224,6 +247,7 @@ es:
       usage: "Uso"
       edit: "Editar"
       delete_confirm: "¿Eliminar esta tarjeta?"
+      delete_modal_title: "Eliminar tarjeta"
       no_cards: "Aún no hay tarjetas de crédito"
       add_first: "Agrega tu primera tarjeta"
     new:
@@ -272,6 +296,8 @@ es:
       actions: "Acciones"
       no_accounts: "Aún no hay cuentas bancarias"
       add_first: "Agrega tu primera cuenta"
+      delete_confirm: "¿Eliminar esta cuenta?"
+      delete_modal_title: "Eliminar cuenta"
     new:
       title: "Agregar Cuenta Bancaria"
     edit:
@@ -321,6 +347,8 @@ es:
       total_value: "Valor Total"
       no_investments: "Aún no hay inversiones"
       add_first: "Agrega tu primera inversión"
+      delete_confirm: "¿Eliminar esta inversión?"
+      delete_modal_title: "Eliminar inversión"
     new:
       title: "Agregar Inversión"
       note: "Los precios de acciones se actualizan automáticamente via brapi.dev (acciones brasileñas). Precios de crypto via CoinGecko. Usa el campo ticker para habilitar actualizaciones automáticas."
@@ -347,6 +375,7 @@ es:
       title: "Categorías"
       new: "Nueva Categoría"
       delete_confirm: "¿Eliminar esta categoría? Los gastos perderán su categoría."
+      delete_modal_title: "Eliminar categoría"
       no_categories: "Aún no hay categorías"
     new:
       title: "Nueva Categoría"
@@ -366,6 +395,7 @@ es:
       title: "Beneficiarios"
       new: "Nuevo Beneficiario"
       delete_confirm: "¿Eliminar este beneficiario?"
+      delete_modal_title: "Eliminar beneficiario"
       no_payees: "Aún no hay beneficiarios"
     new:
       title: "Nuevo Beneficiario"
@@ -392,6 +422,7 @@ es:
       gain_loss: "Ganancia / Pérdida"
       actions: "Acciones"
       delete_confirm: "¿Eliminar este bien?"
+      delete_modal_title: "Eliminar bien"
       no_possessions: "Aún no hay bienes"
       add_first: "Agrega tu primer bien"
     new:
@@ -444,6 +475,16 @@ es:
       installment_expenses: "Gastos en Cuotas"
       credit_card_bills: "Facturas de Tarjeta"
       actuals: "Realizados —"
+      actuals_for: "Realizados en"
+      actual_income: "Ingresos Reales"
+      actual_expenses: "Gastos Reales"
+      actual_balance: "Saldo Real"
+      income_source: "fuente de ingreso"
+      income_sources: "fuentes de ingreso"
+      transactions: "transacciones"
+      actual_by_category: "Gastos Reales por Categoría"
+      all_expenses: "Todos los Gastos"
+      no_expenses_month: "Sin gastos registrados este mes"
 
   settings:
     edit:
@@ -474,6 +515,9 @@ es:
       language_es: "Español"
 
   shared:
+    delete_modal:
+      confirm: "Eliminar"
+      cancel: "Cancelar"
     empty_state:
       default: "Nada aquí todavía"
 

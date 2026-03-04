@@ -69,10 +69,35 @@ class ExpensesController < ApplicationController
   end
 
   def destroy
-    @expense.destroy
-    respond_to do |format|
-      format.html { redirect_to expenses_path, notice: t("controllers.expenses.destroyed") }
-      format.turbo_stream { render turbo_stream: turbo_stream.remove("expense_#{@expense.id}") }
+    group_id = @expense.installment? ? @expense.installment_group_id : nil
+
+    if params[:delete_following].present?
+      if @expense.recurring_source_id.present?
+        current_user.expenses
+          .where(recurring_source_id: @expense.recurring_source_id)
+          .where("date >= ?", @expense.date)
+          .destroy_all
+      elsif @expense.installment?
+        current_user.expenses
+          .where(installment_group_id: group_id)
+          .where("installment_number >= ?", @expense.installment_number)
+          .destroy_all
+        renumber_installments(group_id)
+      else
+        @expense.destroy
+      end
+      redirect_to expenses_path, notice: t("controllers.expenses.destroyed")
+    else
+      @expense.destroy
+      if group_id
+        renumber_installments(group_id)
+        redirect_to expenses_path, notice: t("controllers.expenses.destroyed")
+      else
+        respond_to do |format|
+          format.html { redirect_to expenses_path, notice: t("controllers.expenses.destroyed") }
+          format.turbo_stream { render turbo_stream: turbo_stream.remove("expense_#{@expense.id}") }
+        end
+      end
     end
   end
 
@@ -109,6 +134,17 @@ class ExpensesController < ApplicationController
       .where(installment_group_id: @expense.installment_group_id)
       .where.not(id: @expense.id)
       .update_all(payee_id: @expense.payee_id)
+  end
+
+  def renumber_installments(group_id)
+    remaining = current_user.expenses
+      .where(installment_group_id: group_id)
+      .order(:installment_number)
+    return if remaining.empty?
+    total = remaining.count
+    remaining.each_with_index do |expense, index|
+      expense.update_columns(installment_number: index + 1, total_installments: total)
+    end
   end
 
   def render_new_with_collections

@@ -1,49 +1,90 @@
 class ForecastController < ApplicationController
   def index
-    # All recurring expenses (not month-specific — these repeat every month)
-    @recurring_expenses = current_user.expenses
-      .recurring
-      .includes(:category, :credit_card)
-      .order("categories.name")
+    @is_past_month = @current_date < Date.current.beginning_of_month
 
-    # Installment expenses due this month (not already counted as recurring)
-    @installment_expenses = current_user.expenses
-      .for_month(@current_date)
-      .where("total_installments > 1")
-      .where(recurring: false)
-      .includes(:category, :credit_card)
-      .order("categories.name")
+    if @is_past_month
+      actual_expenses_scope = current_user.expenses
+        .for_month(@current_date)
+        .includes(:category, :credit_card)
 
-    # Projected spending by category (recurring + installments combined)
-    recurring_by_category = @recurring_expenses
-      .joins(:category)
-      .group("categories.name", "categories.color")
-      .sum(:amount)
+      @actual_total = actual_expenses_scope.sum(:amount)
+      @actual_expenses = actual_expenses_scope.order(date: :desc).to_a
 
-    installment_by_category = @installment_expenses
-      .joins(:category)
-      .group("categories.name", "categories.color")
-      .sum(:amount)
+      @actual_by_payment_method = @actual_expenses
+        .group_by(&:payment_method)
+        .transform_values { |exps| exps.sum(&:amount) }
+        .reject { |_, v| v.zero? }
 
-    @projected_by_category = recurring_by_category.merge(installment_by_category) { |_key, a, b| a + b }
+      @credit_card_bills = @actual_expenses
+        .select { |e| e.payment_method == "credit_card" && e.credit_card }
+        .group_by(&:credit_card)
+        .transform_values { |exps| exps.sum(&:amount) }
+        .sort_by { |_, v| -v }
+        .to_h
 
-    # Load into memory for in-memory aggregation (avoids extra SQL queries)
-    all_projected = @recurring_expenses.to_a + @installment_expenses.to_a
-    @projected_total = all_projected.sum(&:amount)
+      @actual_incomes = current_user.incomes.for_month(@current_date)
+      @actual_income_total = @actual_incomes.sum(:amount)
+      @actual_balance = @actual_income_total - @actual_total
 
-    # Breakdown by payment method (boleto, credit_card, pix, cash)
-    @projected_by_payment_method = all_projected
-      .group_by(&:payment_method)
-      .transform_values { |exps| exps.sum(&:amount) }
-      .reject { |_, v| v.zero? }
+      @forecast_chart_data = @actual_expenses
+        .group_by { |e| e.category.name }
+        .transform_values { |exps| exps.sum(&:amount).to_f }
+        .map { |name, amt| [ I18n.t("category_names.#{name}", default: name), amt ] }
+        .to_h
+    else
+      # All recurring expenses (not month-specific — these repeat every month)
+      @recurring_expenses = current_user.expenses
+        .recurring
+        .includes(:category, :credit_card)
+        .order("categories.name")
 
-    # Credit card projected bills grouped by card
-    @credit_card_bills = all_projected
-      .select { |e| e.payment_method == "credit_card" && e.credit_card }
-      .group_by(&:credit_card)
-      .transform_values { |exps| exps.sum(&:amount) }
-      .sort_by { |_, v| -v }
-      .to_h
+      # Installment expenses due this month (not already counted as recurring)
+      @installment_expenses = current_user.expenses
+        .for_month(@current_date)
+        .where("total_installments > 1")
+        .where(recurring: false)
+        .includes(:category, :credit_card)
+        .order("categories.name")
+
+      # Projected spending by category (recurring + installments combined)
+      recurring_by_category = @recurring_expenses
+        .joins(:category)
+        .group("categories.name", "categories.color")
+        .sum(:amount)
+
+      installment_by_category = @installment_expenses
+        .joins(:category)
+        .group("categories.name", "categories.color")
+        .sum(:amount)
+
+      @projected_by_category = recurring_by_category.merge(installment_by_category) { |_key, a, b| a + b }
+
+      # Load into memory for in-memory aggregation (avoids extra SQL queries)
+      all_projected = @recurring_expenses.to_a + @installment_expenses.to_a
+      @projected_total = all_projected.sum(&:amount)
+
+      # Breakdown by payment method (boleto, credit_card, pix, cash)
+      @projected_by_payment_method = all_projected
+        .group_by(&:payment_method)
+        .transform_values { |exps| exps.sum(&:amount) }
+        .reject { |_, v| v.zero? }
+
+      # Credit card projected bills grouped by card
+      @credit_card_bills = all_projected
+        .select { |e| e.payment_method == "credit_card" && e.credit_card }
+        .group_by(&:credit_card)
+        .transform_values { |exps| exps.sum(&:amount) }
+        .sort_by { |_, v| -v }
+        .to_h
+
+      # Projected income from recurring
+      @recurring_incomes = current_user.incomes.where(recurring: true)
+      @projected_income = @recurring_incomes.sum(:amount)
+      @projected_balance = @projected_income - @projected_total
+
+      # Chart data (with translated category names)
+      @forecast_chart_data = @projected_by_category.map { |(name, _color), amt| [ I18n.t("category_names.#{name}", default: name), amt.to_f ] }.to_h
+    end
 
     # Previous month actuals for comparison
     prev_month = @current_date - 1.month
@@ -54,13 +95,5 @@ class ForecastController < ApplicationController
       .joins(:category)
       .group("categories.name")
       .sum(:amount)
-
-    # Projected income from recurring
-    @recurring_incomes = current_user.incomes.where(recurring: true)
-    @projected_income = @recurring_incomes.sum(:amount)
-    @projected_balance = @projected_income - @projected_total
-
-    # Chart data (with translated category names)
-    @forecast_chart_data = @projected_by_category.map { |(name, _color), amt| [ I18n.t("category_names.#{name}", default: name), amt.to_f ] }.to_h
   end
 end

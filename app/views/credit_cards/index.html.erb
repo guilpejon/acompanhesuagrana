@@ -60,12 +60,14 @@
               <%= link_to edit_credit_card_path(card), class: "flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors hover:bg-white/5", style: "color: #8892A4; border: 1px solid #2A2F45;" do %>
                 <%= svg_icon "edit", css_class: "w-3.5 h-3.5" %> <%= t("credit_cards.index.edit") %>
               <% end %>
-              <%= button_to credit_card_path(card), method: :delete,
-                  form: { data: { turbo_confirm: t("credit_cards.index.delete_confirm") } },
-                  class: "px-3 py-2 rounded-lg text-xs font-medium transition-colors hover:bg-white/5",
-                  style: "color: #FF6B6B; border: 1px solid #2A2F45; background: none; cursor: pointer;" do %>
-                <%= svg_icon "trash-2", css_class: "w-3.5 h-3.5" %>
-              <% end %>
+              <%= render "shared/delete_modal_button",
+                  path: credit_card_path(card),
+                  title: t("credit_cards.index.delete_modal_title"),
+                  question: t("credit_cards.index.delete_confirm"),
+                  confirm_label: t("shared.delete_modal.confirm"),
+                  cancel_label: t("shared.delete_modal.cancel"),
+                  trigger_class: "px-3 py-2 rounded-lg text-xs font-medium transition-colors hover:bg-white/5",
+                  trigger_style: "color: #FF6B6B; border: 1px solid #2A2F45; background: none; cursor: pointer;" %>
             </div>
           </div>
         </div>

@@ -179,6 +179,20 @@ pt-BR:
       cancel: "Cancelar"
     expense:
       delete_confirm: "Excluir esta despesa?"
+      standard_delete:
+        title: "Excluir despesa"
+        question: "Esta ação não pode ser desfeita."
+        confirm: "Excluir"
+      recurring_delete:
+        title: "Excluir despesa recorrente"
+        question: "Deseja excluir apenas esta ocorrência ou esta e todas as seguintes?"
+        confirm: "Excluir apenas esta"
+        this_and_following: "Excluir esta e as seguintes"
+      installment_delete:
+        title: "Excluir despesa parcelada"
+        question: "Deseja excluir apenas esta parcela ou esta e todas as restantes?"
+        confirm: "Excluir apenas esta"
+        this_and_following: "Excluir esta e as restantes"
     payment_statuses:
       pending: "Não Agendado"
       scheduled: "Agendado"
@@ -212,6 +226,15 @@ pt-BR:
       cancel: "Cancelar"
     income:
       delete_confirm: "Excluir esta receita?"
+      standard_delete:
+        title: "Excluir receita"
+        question: "Esta ação não pode ser desfeita."
+        confirm: "Excluir"
+      recurring_delete:
+        title: "Excluir receita recorrente"
+        question: "Deseja excluir apenas esta ocorrência ou esta e todas as seguintes?"
+        confirm: "Excluir apenas esta"
+        this_and_following: "Excluir esta e as seguintes"
 
   credit_cards:
     index:
@@ -224,6 +247,7 @@ pt-BR:
       usage: "Uso"
       edit: "Editar"
       delete_confirm: "Remover este cartão?"
+      delete_modal_title: "Remover cartão"
       no_cards: "Nenhum cartão de crédito adicionado"
       add_first: "Adicionar primeiro cartão"
     new:
@@ -272,6 +296,8 @@ pt-BR:
       actions: "Ações"
       no_accounts: "Nenhuma conta bancária adicionada"
       add_first: "Adicionar primeira conta"
+      delete_confirm: "Remover esta conta?"
+      delete_modal_title: "Remover conta"
     new:
       title: "Adicionar Conta Bancária"
     edit:
@@ -321,6 +347,8 @@ pt-BR:
       total_value: "Valor Total"
       no_investments: "Nenhum investimento adicionado"
       add_first: "Adicionar primeiro investimento"
+      delete_confirm: "Remover este investimento?"
+      delete_modal_title: "Remover investimento"
     new:
       title: "Adicionar Investimento"
       note: "Preços de ações são atualizados automaticamente via brapi.dev (ações brasileiras). Preços de crypto via CoinGecko. Use o campo ticker para habilitar atualizações automáticas."
@@ -347,6 +375,7 @@ pt-BR:
       title: "Categorias"
       new: "Nova Categoria"
       delete_confirm: "Excluir esta categoria? As despesas perderão sua categoria."
+      delete_modal_title: "Excluir categoria"
       no_categories: "Nenhuma categoria ainda"
     new:
       title: "Nova Categoria"
@@ -366,6 +395,7 @@ pt-BR:
       title: "Beneficiários"
       new: "Novo Beneficiário"
       delete_confirm: "Excluir este beneficiário?"
+      delete_modal_title: "Excluir beneficiário"
       no_payees: "Nenhum beneficiário ainda"
     new:
       title: "Novo Beneficiário"
@@ -392,6 +422,7 @@ pt-BR:
       gain_loss: "Ganho / Perda"
       actions: "Ações"
       delete_confirm: "Remover este bem?"
+      delete_modal_title: "Remover bem"
       no_possessions: "Nenhum bem adicionado"
       add_first: "Adicionar primeiro bem"
     new:
@@ -444,6 +475,16 @@ pt-BR:
       installment_expenses: "Despesas Parceladas"
       credit_card_bills: "Faturas de Cartão"
       actuals: "Realizados —"
+      actuals_for: "Realizado em"
+      actual_income: "Receita Real"
+      actual_expenses: "Despesas Reais"
+      actual_balance: "Saldo Real"
+      income_source: "fonte de receita"
+      income_sources: "fontes de receita"
+      transactions: "transações"
+      actual_by_category: "Gastos Reais por Categoria"
+      all_expenses: "Todas as Despesas"
+      no_expenses_month: "Nenhuma despesa registrada neste mês"
 
   settings:
     edit:
@@ -474,6 +515,9 @@ pt-BR:
       language_es: "Español"
 
   shared:
+    delete_modal:
+      confirm: "Excluir"
+      cancel: "Cancelar"
     empty_state:
       default: "Nada aqui ainda"
 

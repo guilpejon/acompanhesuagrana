@@ -26,12 +26,12 @@
               <%= link_to edit_category_path(cat), class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors", style: "color: #8892A4;" do %>
                 <%= svg_icon "edit", css_class: "w-3.5 h-3.5" %>
               <% end %>
-              <%= button_to category_path(cat), method: :delete,
-                  form: { data: { turbo_confirm: t("categories.index.delete_confirm") } },
-                  class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors",
-                  style: "color: #8892A4; background: none; border: none; cursor: pointer;" do %>
-                <%= svg_icon "trash-2", css_class: "w-3.5 h-3.5" %>
-              <% end %>
+              <%= render "shared/delete_modal_button",
+                  path: category_path(cat),
+                  title: t("categories.index.delete_modal_title"),
+                  question: t("categories.index.delete_confirm"),
+                  confirm_label: t("shared.delete_modal.confirm"),
+                  cancel_label: t("shared.delete_modal.cancel") %>
             </div>
           </div>
         <% end %>

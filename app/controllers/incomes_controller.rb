@@ -36,10 +36,18 @@ class IncomesController < ApplicationController
   end
 
   def destroy
-    @income.destroy
-    respond_to do |format|
-      format.html { redirect_to incomes_path, notice: t("controllers.incomes.destroyed") }
-      format.turbo_stream { render turbo_stream: turbo_stream.remove("income_#{@income.id}") }
+    if params[:delete_following].present? && @income.recurring_source_id.present?
+      current_user.incomes
+        .where(recurring_source_id: @income.recurring_source_id)
+        .where("date >= ?", @income.date)
+        .destroy_all
+      redirect_to incomes_path, notice: t("controllers.incomes.destroyed")
+    else
+      @income.destroy
+      respond_to do |format|
+        format.html { redirect_to incomes_path, notice: t("controllers.incomes.destroyed") }
+        format.turbo_stream { render turbo_stream: turbo_stream.remove("income_#{@income.id}") }
+      end
     end
   end
 

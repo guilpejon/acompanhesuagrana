@@ -1,3 +1,10 @@
+<% delete_i18n_key = if expense.recurring_source_id.present?
+                       "recurring_delete"
+                     elsif expense.installment?
+                       "installment_delete"
+                     else
+                       "standard_delete"
+                     end %>
 <div id="expense_<%= expense.id %>" class="flex gap-3 px-4 py-3 hover:bg-white/[0.02] transition-colors">
   <%# Category icon %>
   <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background-color: <%= expense.category.color %>22;">
@@ -55,11 +62,13 @@
         <%= link_to edit_expense_path(expense), class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors", style: "color: #8892A4;" do %>
           <%= svg_icon "edit", css_class: "w-3.5 h-3.5" %>
         <% end %>
-        <%= button_to expense_path(expense), method: :delete,
-            form: { data: { turbo_confirm: t("expenses.expense.delete_confirm") } },
-            class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors", style: "color: #8892A4; background: none; border: none; cursor: pointer;" do %>
-          <%= svg_icon "trash-2", css_class: "w-3.5 h-3.5" %>
-        <% end %>
+        <%= render "shared/delete_modal_button",
+            path: expense_path(expense),
+            title: t("expenses.expense.#{delete_i18n_key}.title"),
+            question: t("expenses.expense.#{delete_i18n_key}.question"),
+            confirm_label: t("expenses.expense.#{delete_i18n_key}.confirm"),
+            cancel_label: t("shared.delete_modal.cancel"),
+            following_label: delete_i18n_key != "standard_delete" ? t("expenses.expense.#{delete_i18n_key}.this_and_following") : nil %>
       </div>
     </div>
   </div>

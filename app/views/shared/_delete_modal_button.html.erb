@@ -1,0 +1,43 @@
+<%# Required locals: path, title, question, confirm_label, cancel_label
+    Optional locals: following_label, accent_rgb (default "255,107,107"), accent_hex (default "#FF6B6B"),
+                     trigger_class, trigger_style %>
+<% _accent_rgb = local_assigns.fetch(:accent_rgb, "255,107,107") %>
+<% _accent_hex = local_assigns.fetch(:accent_hex, "#FF6B6B") %>
+<% _trigger_class = local_assigns.fetch(:trigger_class, "p-1.5 rounded-lg hover:bg-white/5 transition-colors") %>
+<% _trigger_style = local_assigns.fetch(:trigger_style, "color: #8892A4; background: none; border: none; cursor: pointer;") %>
+<span data-controller="recurring-delete">
+  <button data-action="click->recurring-delete#show"
+          class="<%= _trigger_class %>"
+          style="<%= _trigger_style %>">
+    <%= svg_icon "trash-2", css_class: "w-3.5 h-3.5" %>
+  </button>
+  <div data-recurring-delete-target="modal"
+       style="display: none;"
+       class="fixed inset-0 z-50 items-center justify-center"
+       data-action="click->recurring-delete#backdropClick">
+    <div class="absolute inset-0" style="background-color: rgba(0,0,0,0.6);"></div>
+    <div class="relative rounded-xl p-6 shadow-2xl max-w-sm w-full mx-4" style="background-color: #1A1F35; border: 1px solid #2A2F45;">
+      <h3 class="text-sm font-semibold mb-1" style="color: #E2E8F0;"><%= title %></h3>
+      <p class="text-sm mb-5" style="color: #8892A4;"><%= question %></p>
+      <div class="flex flex-col gap-2">
+        <%= button_to path, method: :delete,
+            class: "w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors",
+            style: "background-color: rgba(#{_accent_rgb},0.15); color: #{_accent_hex}; border: none; cursor: pointer;" do %>
+          <%= confirm_label %>
+        <% end %>
+        <% if local_assigns[:following_label].present? %>
+          <%= button_to path, method: :delete, params: { delete_following: true },
+              class: "w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors",
+              style: "background-color: rgba(#{_accent_rgb},0.25); color: #{_accent_hex}; border: none; cursor: pointer;" do %>
+            <%= following_label %>
+          <% end %>
+        <% end %>
+        <button data-action="click->recurring-delete#hide"
+                class="w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors"
+                style="background-color: rgba(42,47,69,0.5); color: #8892A4; border: none; cursor: pointer;">
+          <%= cancel_label %>
+        </button>
+      </div>
+    </div>
+  </div>
+</span>

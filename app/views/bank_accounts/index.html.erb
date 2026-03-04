@@ -111,12 +111,12 @@
                   <%= link_to edit_bank_account_path(account), class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors", style: "color: #8892A4;" do %>
                     <%= svg_icon "edit", css_class: "w-3.5 h-3.5" %>
                   <% end %>
-                  <%= button_to bank_account_path(account), method: :delete,
-                      form: { data: { turbo_confirm: "Remove this account?" } },
-                      class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors",
-                      style: "color: #8892A4; background: none; border: none; cursor: pointer;" do %>
-                    <%= svg_icon "trash-2", css_class: "w-3.5 h-3.5" %>
-                  <% end %>
+                  <%= render "shared/delete_modal_button",
+                      path: bank_account_path(account),
+                      title: t("bank_accounts.index.delete_modal_title"),
+                      question: t("bank_accounts.index.delete_confirm"),
+                      confirm_label: t("shared.delete_modal.confirm"),
+                      cancel_label: t("shared.delete_modal.cancel") %>
                 </div>
               </div>
 
@@ -125,12 +125,12 @@
                 <%= link_to edit_bank_account_path(account), class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors", style: "color: #8892A4;" do %>
                   <%= svg_icon "edit", css_class: "w-3.5 h-3.5" %>
                 <% end %>
-                <%= button_to bank_account_path(account), method: :delete,
-                    form: { data: { turbo_confirm: "Remove this account?" } },
-                    class: "p-1.5 rounded-lg hover:bg-white/5 transition-colors",
-                    style: "color: #8892A4; background: none; border: none; cursor: pointer;" do %>
-                  <%= svg_icon "trash-2", css_class: "w-3.5 h-3.5" %>
-                <% end %>
+                <%= render "shared/delete_modal_button",
+                    path: bank_account_path(account),
+                    title: t("bank_accounts.index.delete_modal_title"),
+                    question: t("bank_accounts.index.delete_confirm"),
+                    confirm_label: t("shared.delete_modal.confirm"),
+                    cancel_label: t("shared.delete_modal.cancel") %>
               </div>
             </div>
           <% end %>
