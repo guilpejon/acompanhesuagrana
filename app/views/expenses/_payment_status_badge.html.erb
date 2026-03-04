@@ -11,7 +11,6 @@
   label = t("expenses.payment_statuses.#{status}", default: status.humanize)
 %>
 
-<span class="text-xs" style="color: #2A2F45;">·</span>
 <%= button_to update_status_expense_path(expense),
     method: :patch,
     title: t("expenses.payment_statuses.click_to_advance"),
