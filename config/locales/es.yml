@@ -120,6 +120,7 @@ es:
     expenses: "Gastos"
     net_balance: "Saldo Neto"
     income_minus_expenses: "Ingresos - Gastos"
+    see_full_projection: "Ver proyección completa →"
     card_bills: "Facturas"
     bank_balance: "Saldo Bancario"
     view_accounts: "Ver cuentas"

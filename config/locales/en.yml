@@ -79,6 +79,7 @@ en:
     expenses: "Expenses"
     net_balance: "Net Balance"
     income_minus_expenses: "Income - Expenses"
+    see_full_projection: "See full projection →"
     card_bills: "Card Bills"
     bank_balance: "Bank Balance"
     view_accounts: "View accounts"

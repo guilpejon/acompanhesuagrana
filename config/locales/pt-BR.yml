@@ -120,6 +120,7 @@ pt-BR:
     expenses: "Despesas"
     net_balance: "Saldo Líquido"
     income_minus_expenses: "Receita - Despesas"
+    see_full_projection: "Ver projeção completa →"
     card_bills: "Faturas"
     bank_balance: "Saldo Bancário"
     view_accounts: "Ver contas"

@@ -3,9 +3,9 @@ class DashboardController < ApplicationController
     @incomes = current_user.incomes.for_month(@current_date)
     @expenses = current_user.expenses.for_month(@current_date).includes(:category, :credit_card)
 
-    @total_income = @incomes.sum(:amount)
-    @total_expenses = @expenses.sum(:amount)
-    @net_balance = @total_income - @total_expenses
+    total_income = @incomes.sum(:amount)
+    total_expenses = @expenses.sum(:amount)
+    @net_balance = total_income - total_expenses
 
     # Credit card bills this month
     @credit_cards = current_user.credit_cards.includes(:expenses)
