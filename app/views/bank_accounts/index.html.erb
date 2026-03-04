@@ -50,10 +50,13 @@
     <% @by_type.each do |type, accounts| %>
       <div class="rounded-xl border overflow-hidden" style="background-color: #1E2130; border-color: #2A2F45;">
         <div class="px-4 py-3 border-b" style="border-color: #2A2F45; background-color: rgba(42,47,69,0.4);">
-          <h2 class="text-sm font-semibold capitalize" style="color: #E2E8F0;">
-            <%= type.capitalize %>
-            <span class="ml-2 text-xs font-normal" style="color: #8892A4;"><%= accounts.count %></span>
-          </h2>
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-semibold capitalize" style="color: #E2E8F0;">
+              <%= type.capitalize %>
+              <span class="ml-2 text-xs font-normal" style="color: #8892A4;"><%= accounts.count %></span>
+            </h2>
+            <span class="text-sm font-semibold" style="color: #E2E8F0;"><%= format_currency(accounts.sum(&:balance)) %></span>
+          </div>
         </div>
 
         <%# Table header %>
