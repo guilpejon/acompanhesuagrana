@@ -104,7 +104,7 @@ es:
       section_finances: "Finanzas"
       section_manage: "Gestionar"
     topbar:
-      back: "Volver"
+      back: "Actual"
       add_expense: "Agregar Gasto"
     mobile_nav:
       home: "Inicio"

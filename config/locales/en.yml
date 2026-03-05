@@ -63,7 +63,7 @@ en:
       section_finances: "Finances"
       section_manage: "Manage"
     topbar:
-      back: "Back"
+      back: "Current"
       add_expense: "Add Expense"
     mobile_nav:
       home: "Home"

@@ -104,7 +104,7 @@ pt-BR:
       section_finances: "Finanças"
       section_manage: "Gerenciar"
     topbar:
-      back: "Voltar"
+      back: "Atual"
       add_expense: "Adicionar Despesa"
     mobile_nav:
       home: "Início"
