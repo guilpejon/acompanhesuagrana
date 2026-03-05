@@ -18,7 +18,7 @@
       <div class="flex items-center gap-2 min-w-0">
         <p class="text-sm font-medium truncate" style="color: #E2E8F0;"><%= expense.description %></p>
         <% if expense.payment_method == "boleto" %>
-          <%= render "expenses/payment_status_badge", expense: expense %>
+          <span class="hidden sm:inline-flex"><%= render "expenses/payment_status_badge", expense: expense %></span>
         <% end %>
       </div>
       <div class="flex items-center gap-2 flex-shrink-0">
@@ -28,6 +28,13 @@
         <span class="text-sm font-semibold whitespace-nowrap" style="color: #FF6B6B;"><%= format_currency(expense.amount) %></span>
       </div>
     </div>
+
+    <%# Mobile-only: payment status badge on its own row %>
+    <% if expense.payment_method == "boleto" %>
+      <div class="sm:hidden mt-1">
+        <%= render "expenses/payment_status_badge", expense: expense %>
+      </div>
+    <% end %>
 
     <%# Bottom row: meta + actions %>
     <div class="flex items-center justify-between gap-2 mt-1">
