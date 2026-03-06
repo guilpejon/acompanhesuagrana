@@ -132,7 +132,7 @@
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-medium truncate" style="color: #E2E8F0;"><%= expense.description %></p>
                 <div class="flex items-center gap-1.5 flex-wrap mt-0.5">
-                  <span class="text-xs" style="color: #8892A4;"><%= category_display_name(expense.category) %> · <%= t("forecast.index.day") %> <%= expense.recurrence_day || "?" %></span>
+                  <span class="text-xs" style="color: #8892A4;"><%= category_display_name(expense.category) %><%= " · #{t("forecast.index.day")} #{expense.recurrence_day}" if expense.recurrence_day %></span>
                   <% if expense.payment_method == "pix" %>
                     <span class="text-xs font-medium px-1.5 py-0.5 rounded" style="background-color: rgba(20,184,166,0.15); color: #14B8A6;">PIX</span>
                   <% elsif expense.payment_method == "boleto" %>

@@ -35,6 +35,7 @@ class ForecastController < ApplicationController
       # All recurring expenses (not month-specific — these repeat every month)
       @recurring_expenses = current_user.expenses
         .recurring
+        .where(recurring_source_id: nil)
         .includes(:category, :credit_card)
         .order("categories.name")
 
