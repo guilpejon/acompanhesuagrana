@@ -25,7 +25,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "creates default categories after create" do
     user = create(:user)
-    assert_equal 9, user.categories.count
+    assert_equal 12, user.categories.count
   end
 
   test "default categories have expected names" do
@@ -38,7 +38,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "destroys dependent categories" do
     user = create(:user)
-    assert_difference "Category.count", -9 do
+    assert_difference "Category.count", -12 do
       user.destroy
     end
   end
@@ -135,6 +135,6 @@ class UserTest < ActiveSupport::TestCase
       info: OmniAuth::AuthHash::InfoHash.new(email: "cattest@example.com", name: "Cat Tester")
     )
     user = User.from_omniauth(auth)
-    assert_equal 9, user.categories.count
+    assert_equal 12, user.categories.count
   end
 end
