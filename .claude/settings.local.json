@@ -11,7 +11,8 @@
       "Bash(bin/rails runner:*)",
       "Bash(bundle exec:*)",
       "Bash(ls:*)",
-      "Bash(bin/rails routes:*)"
+      "Bash(bin/rails routes:*)",
+      "Read(//Users/guilpejon/Downloads/**)"
     ]
   }
 }

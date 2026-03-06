@@ -63,6 +63,9 @@ class User < ApplicationRecord
       { name: "Shopping",      color: "#84CC16", icon: "shopping-cart" },
       { name: "Education",     color: "#60A5FA", icon: "book-open" },
       { name: "Travel",        color: "#F472B6", icon: "plane" },
+      { name: "Fitness",       color: "#FB923C", icon: "dumbbell" },
+      { name: "Utilities",     color: "#60A5FA", icon: "zap" },
+      { name: "Kids",          color: "#00D4AA", icon: "baby" },
       { name: "Other",         color: "#8892A4", icon: "layers" }
     ]
 
