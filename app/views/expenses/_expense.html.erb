@@ -5,7 +5,7 @@
                      else
                        "standard_delete"
                      end %>
-<div id="expense_<%= expense.id %>" class="flex gap-3 px-4 py-3 hover:bg-white/[0.02] transition-colors">
+<div id="expense_<%= expense.id %>" class="flex gap-3 px-4 py-3 hover:bg-white/[0.02] transition-colors" style="<%= "background-color: rgba(0,212,170,0.06);" if expense.payment_status == "paid" %>">
   <%# Category icon %>
   <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background-color: <%= expense.category.color %>22;">
     <%= svg_icon expense.category.icon, css_class: "w-4 h-4", stroke: expense.category.color %>
