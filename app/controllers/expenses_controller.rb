@@ -54,6 +54,7 @@ class ExpensesController < ApplicationController
     resolve_payee!
     if @expense.update(expense_params)
       propagate_payee_to_installment_group!
+      propagate_recurring_changes!
       if was_recurring && !@expense.recurring?
         if source_id.present?
           current_user.expenses
@@ -147,6 +148,21 @@ class ExpensesController < ApplicationController
       payee = current_user.payees.find_or_create_by!(name: name)
       params[:expense][:payee_id] = payee.id
     end
+  end
+
+  def propagate_recurring_changes!
+    return unless @expense.recurring? && !@expense.installment?
+    return unless @expense.saved_change_to_amount? || @expense.saved_change_to_category_id?
+
+    source_id = @expense.recurring_source_id || @expense.id
+    updates = {}
+    updates[:amount] = @expense.amount if @expense.saved_change_to_amount?
+    updates[:category_id] = @expense.category_id if @expense.saved_change_to_category_id?
+
+    current_user.expenses
+      .where(recurring_source_id: source_id)
+      .where("date > ?", Date.today)
+      .update_all(updates)
   end
 
   def propagate_payee_to_installment_group!
