@@ -206,5 +206,8 @@ class IncomesControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
     delete income_path(@income), headers: { "Accept" => "text/vnd.turbo-stream.html" }
     assert_response :success
+    assert_match %r{action="remove".*target="income_#{@income.id}"}m, response.body
+    assert_match %r{action="prepend".*target="flash-messages"}m, response.body
+    assert_match I18n.t("controllers.incomes.destroyed"), response.body
   end
 end

@@ -508,6 +508,9 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
     delete expense_path(@expense), headers: { "Accept" => "text/vnd.turbo-stream.html" }
     assert_response :success
+    assert_match %r{action="remove".*target="expense_#{@expense.id}"}m, response.body
+    assert_match %r{action="prepend".*target="flash-messages"}m, response.body
+    assert_match I18n.t("controllers.expenses.destroyed"), response.body
   end
 
   test "DELETE destroy with delete_following removes recurring future expenses" do

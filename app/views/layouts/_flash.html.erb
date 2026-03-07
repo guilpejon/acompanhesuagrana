@@ -1,0 +1,9 @@
+<% if type == :notice %>
+  <% bg = "rgba(0,212,170,0.1)"; border = "#00D4AA"; color = "#00D4AA" %>
+<% else %>
+  <% bg = "rgba(255,107,107,0.1)"; border = "#FF6B6B"; color = "#FF6B6B" %>
+<% end %>
+<div data-controller="flash" class="mb-4 px-4 py-3 rounded-lg text-sm font-medium border flex items-center justify-between gap-4" style="background-color: <%= bg %>; border-color: <%= border %>; color: <%= color %>;">
+  <span><%= message %></span>
+  <button type="button" data-action="flash#dismiss" class="shrink-0 opacity-70 hover:opacity-100 transition-opacity cursor-pointer" aria-label="Dismiss">&times;</button>
+</div>

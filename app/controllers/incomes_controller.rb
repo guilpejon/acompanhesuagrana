@@ -62,7 +62,12 @@ class IncomesController < ApplicationController
       @income.destroy
       respond_to do |format|
         format.html { redirect_to incomes_path, notice: t("controllers.incomes.destroyed") }
-        format.turbo_stream { render turbo_stream: turbo_stream.remove("income_#{@income.id}") }
+        format.turbo_stream do
+            render turbo_stream: [
+              turbo_stream.remove("income_#{@income.id}"),
+              turbo_stream.prepend("flash-messages", partial: "layouts/flash", locals: { type: :notice, message: t("controllers.incomes.destroyed") })
+            ]
+          end
       end
     end
   end

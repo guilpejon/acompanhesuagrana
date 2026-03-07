@@ -120,7 +120,12 @@ class ExpensesController < ApplicationController
       else
         respond_to do |format|
           format.html { redirect_to expenses_path, notice: t("controllers.expenses.destroyed") }
-          format.turbo_stream { render turbo_stream: turbo_stream.remove("expense_#{@expense.id}") }
+          format.turbo_stream do
+            render turbo_stream: [
+              turbo_stream.remove("expense_#{@expense.id}"),
+              turbo_stream.prepend("flash-messages", partial: "layouts/flash", locals: { type: :notice, message: t("controllers.expenses.destroyed") })
+            ]
+          end
         end
       end
     end
