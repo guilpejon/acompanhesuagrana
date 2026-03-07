@@ -83,43 +83,45 @@
     </div>
 
     <%# Desktop: card grid %>
-    <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-4">
       <% @credit_cards.each do |card| %>
         <% is_default = current_user.default_credit_card_id == card.id %>
         <div class="rounded-xl border overflow-hidden" style="background-color: #1E2130; border-color: <%= is_default ? '#6C63FF' : '#2A2F45' %>;">
           <%# Card visual %>
-          <div class="p-5 relative" style="background: linear-gradient(135deg, <%= card.color_hex %>, <%= card.color_hex %>88);">
-            <div class="flex items-start justify-between mb-6">
+          <div class="px-4 py-3 relative" style="background: linear-gradient(135deg, <%= card.color_hex %>, <%= card.color_hex %>88);">
+            <div class="flex items-start justify-between mb-3">
               <div>
                 <p class="text-xs font-medium opacity-80" style="color: white;"><%= t("credit_cards.index.title") %></p>
-                <p class="text-base font-bold mt-0.5" style="color: white;"><%= card.name %></p>
+                <p class="text-sm font-bold mt-0.5" style="color: white;"><%= card.name %></p>
               </div>
               <div class="flex items-center gap-2">
                 <% if is_default %>
                   <span class="text-xs font-semibold px-2 py-0.5 rounded-full" style="background-color: rgba(255,255,255,0.2); color: white;"><%= t("credit_cards.index.default_badge") %></span>
                 <% end %>
                 <div class="opacity-80">
-                  <%= svg_icon "credit-card", css_class: "w-7 h-7", stroke: "white" %>
+                  <%= svg_icon "credit-card", css_class: "w-5 h-5", stroke: "white" %>
                 </div>
               </div>
             </div>
-            <p class="text-sm font-mono tracking-widest opacity-90" style="color: white;">
-              •••• •••• •••• <%= card.last4 || "••••" %>
-            </p>
-            <p class="text-xs mt-1 opacity-70" style="color: white;"><%= card.brand&.upcase || "CARD" %></p>
+            <div class="flex items-end justify-between">
+              <p class="text-xs font-mono tracking-widest opacity-90" style="color: white;">
+                •••• •••• •••• <%= card.last4 || "••••" %>
+              </p>
+              <p class="text-xs opacity-70" style="color: white;"><%= card.brand&.upcase || "CARD" %></p>
+            </div>
           </div>
 
           <%# Card details %>
-          <div class="p-4 space-y-3">
-            <div class="flex items-center justify-between text-sm">
+          <div class="px-3 py-2.5 space-y-2">
+            <div class="flex items-center justify-between text-xs">
               <span style="color: #8892A4;"><%= t("credit_cards.index.current_bill") %></span>
               <span class="font-semibold" style="color: #F7B731;"><%= format_currency(card.current_bill(@current_date)) %></span>
             </div>
-            <div class="flex items-center justify-between text-sm">
+            <div class="flex items-center justify-between text-xs">
               <span style="color: #8892A4;"><%= t("credit_cards.index.limit") %></span>
               <span class="font-medium" style="color: #E2E8F0;"><%= format_currency(card.limit) %></span>
             </div>
-            <div class="flex items-center justify-between text-sm">
+            <div class="flex items-center justify-between text-xs">
               <span style="color: #8892A4;"><%= t("credit_cards.index.billing_due") %></span>
               <span class="font-medium" style="color: #E2E8F0;"><%= t("credit_cards.index.day") %> <%= card.billing_day %> / <%= t("credit_cards.index.day") %> <%= card.due_day %></span>
             </div>
@@ -131,20 +133,20 @@
                 <span><%= t("credit_cards.index.usage") %></span>
                 <span><%= usage_pct %>%</span>
               </div>
-              <div class="h-1.5 rounded-full" style="background-color: #2A2F45;">
-                <div class="h-1.5 rounded-full transition-all" style="width: <%= usage_pct %>%; background-color: <%= usage_pct > 80 ? '#FF6B6B' : card.color_hex %>;"></div>
+              <div class="h-1 rounded-full" style="background-color: #2A2F45;">
+                <div class="h-1 rounded-full transition-all" style="width: <%= usage_pct %>%; background-color: <%= usage_pct > 80 ? '#FF6B6B' : card.color_hex %>;"></div>
               </div>
             </div>
 
-            <div class="flex gap-2 pt-1">
+            <div class="flex gap-1.5 pt-0.5">
               <%= button_to set_default_credit_card_path(card), method: :patch,
-                  class: "flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors hover:bg-white/5",
+                  class: "flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-colors hover:bg-white/5",
                   style: "border: 1px solid #{is_default ? '#6C63FF' : '#2A2F45'}; color: #{is_default ? '#6C63FF' : '#8892A4'}; background: none; cursor: pointer;" do %>
-                <%= svg_icon(is_default ? "star" : "star", css_class: "w-3.5 h-3.5") %>
+                <%= svg_icon(is_default ? "star" : "star", css_class: "w-3 h-3") %>
                 <%= is_default ? t("credit_cards.index.unset_default") : t("credit_cards.index.set_default") %>
               <% end %>
-              <%= link_to edit_credit_card_path(card), class: "flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors hover:bg-white/5", style: "color: #8892A4; border: 1px solid #2A2F45;" do %>
-                <%= svg_icon "edit", css_class: "w-3.5 h-3.5" %> <%= t("credit_cards.index.edit") %>
+              <%= link_to edit_credit_card_path(card), class: "flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-colors hover:bg-white/5", style: "color: #8892A4; border: 1px solid #2A2F45;" do %>
+                <%= svg_icon "edit", css_class: "w-3 h-3" %> <%= t("credit_cards.index.edit") %>
               <% end %>
               <%= render "shared/delete_modal_button",
                   path: credit_card_path(card),
