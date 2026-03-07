@@ -3,6 +3,10 @@ import flatpickr from "flatpickr"
 
 export default class extends Controller {
   connect() {
+    if (this.element._flatpickr) {
+      this.element._flatpickr.destroy()
+    }
+
     this.picker = flatpickr(this.element, {
       dateFormat: "Y-m-d",
     })
