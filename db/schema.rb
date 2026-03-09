@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_07_005627) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_09_235533) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -65,7 +65,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_07_005627) do
     t.string "installment_group_id"
     t.integer "installment_number", default: 1, null: false
     t.bigint "payee_id"
-    t.string "payment_method", default: "cash", null: false
+    t.string "payment_method", default: "credit_card", null: false
     t.string "payment_status"
     t.integer "recurrence_day"
     t.boolean "recurring", default: false

@@ -113,6 +113,19 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "GET new pre-selects credit_card as default payment method" do
+    sign_in @user
+    get new_expense_path
+    assert_select "input[type='radio'][name='expense[payment_method]'][value='credit_card'][checked]"
+  end
+
+  test "GET new payment method order is credit_card, pix, boleto, cash" do
+    sign_in @user
+    get new_expense_path
+    values = css_select("input[type='radio'][name='expense[payment_method]']").map { |el| el["value"] }
+    assert_equal %w[credit_card pix boleto cash], values
+  end
+
   test "GET new pre-selects default credit card" do
     card = create(:credit_card, user: @user)
     @user.update!(default_credit_card_id: card.id)

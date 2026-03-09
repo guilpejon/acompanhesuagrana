@@ -134,6 +134,14 @@ class ExpenseTest < ActiveSupport::TestCase
     assert expense.valid?
   end
 
+  # payment_method default
+  test "new expense defaults payment_method to credit_card" do
+    user = create(:user)
+    category = user.categories.first
+    expense = user.expenses.build(amount: 10, date: Date.current, category: category, expense_type: "variable")
+    assert_equal "credit_card", expense.payment_method
+  end
+
   # payment_method
   test "validates payment_method inclusion" do
     expense = build(:expense, payment_method: "wire_transfer")

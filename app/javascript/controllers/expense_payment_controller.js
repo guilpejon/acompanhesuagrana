@@ -93,6 +93,6 @@ export default class extends Controller {
     for (const radio of radios) {
       if (radio.checked) return radio.value
     }
-    return "cash"
+    return "credit_card"
   }
 }
