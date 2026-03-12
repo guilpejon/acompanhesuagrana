@@ -9,14 +9,17 @@
      data-expense-filter-target="row"
      data-section="<%= expense.expense_type %>"
      data-search-text="<%= [expense.description, category_display_name(expense.category), (expense.payment_method == "credit_card" && expense.credit_card) ? "#{t("expenses.form.#{expense.payment_method}")} (#{expense.credit_card.name})" : t("expenses.form.#{expense.payment_method}"), expense.payment_status ? t("expenses.payment_statuses.#{expense.payment_status}") : nil].compact.join(' ') %>"
-     class="flex gap-3 px-4 py-3 hover:bg-white/[0.02] transition-colors" style="<%= case expense.payment_status
+     class="flex items-center gap-4 px-3 py-3 hover:bg-white/[0.02] transition-colors" style="<%= case expense.payment_status
             when "paid"      then "background-color: rgba(0,212,170,0.06);"
             when "scheduled" then "background-color: rgba(129,140,248,0.06);"
             when "pending"   then "background-color: rgba(255,107,107,0.06);"
             end %>">
-  <%# Category icon %>
-  <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background-color: <%= expense.category.color %>22;">
-    <%= svg_icon expense.category.icon, css_class: "w-4 h-4", stroke: expense.category.color %>
+  <%# Category icon + name %>
+  <div class="flex flex-col items-center gap-1 flex-shrink-0 w-9 sm:w-14">
+    <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background-color: <%= expense.category.color %>22;">
+      <%= svg_icon expense.category.icon, css_class: "w-4 h-4", stroke: expense.category.color %>
+    </div>
+    <span class="hidden sm:block text-center whitespace-nowrap" style="font-size: 10px; line-height: 1.2; color: #8892A4;" title="<%= category_display_name(expense.category) %>"><%= category_display_name(expense.category).split(' ').first %></span>
   </div>
 
   <%# Content %>
@@ -51,9 +54,7 @@
       <%# Meta info: plain text + category badge %>
       <div class="flex items-center gap-1.5 flex-wrap min-w-0">
         <span class="text-xs" style="color: #8892A4;"><%= "#{expense.date.day} #{t('date.month_names')[expense.date.month]}" %></span>
-        <span class="text-xs" style="color: #2A2F45;">·</span>
-        <span class="text-xs" style="color: #8892A4;"><%= category_display_name(expense.category) %></span>
-        <span class="text-xs" style="color: #2A2F45;">·</span>
+        <span class="inline-block w-1 h-1 rounded-full flex-shrink-0" style="background-color: #4A5568;"></span>
         <% if expense.payment_method == "credit_card" && expense.credit_card %>
           <span class="text-xs" style="color: #8892A4;"><%= t("expenses.form.#{expense.payment_method}") %> (<%= expense.credit_card.name %>)</span>
         <% else %>
