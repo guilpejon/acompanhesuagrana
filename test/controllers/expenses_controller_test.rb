@@ -657,4 +657,50 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     delete expense_path(expense), headers: { "Accept" => "text/vnd.turbo-stream.html" }
     assert_in_delta 1000.00, bank_account.reload.balance, 0.01
   end
+
+  # bank_account_id propagation to future recurring instances
+  test "PATCH update propagates bank_account_id to future recurring instances" do
+    bank_account = create(:bank_account, user: @user, balance: 1000.00)
+    template = create(:expense, user: @user, category: @category, expense_type: "fixed",
+                      payment_method: "pix", recurring: true, recurrence_day: 5)
+    future1 = create(:expense, user: @user, category: @category, expense_type: "fixed",
+                     payment_method: "pix", recurring: true, recurring_source_id: template.id,
+                     date: 1.month.from_now.change(day: 5))
+    future2 = create(:expense, user: @user, category: @category, expense_type: "fixed",
+                     payment_method: "pix", recurring: true, recurring_source_id: template.id,
+                     date: 2.months.from_now.change(day: 5))
+
+    sign_in @user
+    patch expense_path(template), params: {
+      expense: { bank_account_id: bank_account.id, payment_method: "pix",
+                 amount: template.amount, date: template.date,
+                 expense_type: "fixed", category_id: @category.id, recurring: "1" }
+    }
+
+    assert_equal bank_account.id, future1.reload.bank_account_id
+    assert_equal bank_account.id, future2.reload.bank_account_id
+  end
+
+  # bank_account_id propagation to all installments in the group
+  test "PATCH update propagates bank_account_id to all installments in the group" do
+    bank_account = create(:bank_account, user: @user, balance: 1000.00)
+    group_id = SecureRandom.uuid
+    inst1 = create(:expense, user: @user, category: @category, payment_method: "boleto",
+                   installment_group_id: group_id, installment_number: 1, total_installments: 3)
+    inst2 = create(:expense, user: @user, category: @category, payment_method: "boleto",
+                   installment_group_id: group_id, installment_number: 2, total_installments: 3)
+    inst3 = create(:expense, user: @user, category: @category, payment_method: "boleto",
+                   installment_group_id: group_id, installment_number: 3, total_installments: 3)
+
+    sign_in @user
+    patch expense_path(inst1), params: {
+      expense: { bank_account_id: bank_account.id, payment_method: "boleto",
+                 amount: inst1.amount, date: inst1.date, expense_type: inst1.expense_type,
+                 category_id: @category.id, total_installments: 3,
+                 installment_number: 1, installment_group_id: group_id }
+    }
+
+    assert_equal bank_account.id, inst2.reload.bank_account_id
+    assert_equal bank_account.id, inst3.reload.bank_account_id
+  end
 end

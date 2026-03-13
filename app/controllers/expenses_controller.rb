@@ -170,7 +170,8 @@ class ExpensesController < ApplicationController
   def propagate_recurring_changes!
     return unless @expense.recurring? && !@expense.installment?
     return unless @expense.saved_change_to_amount? || @expense.saved_change_to_category_id? ||
-                  @expense.saved_change_to_date? || @expense.saved_change_to_credit_card_id?
+                  @expense.saved_change_to_date? || @expense.saved_change_to_credit_card_id? ||
+                  @expense.saved_change_to_bank_account_id?
 
     source_id = @expense.recurring_source_id || @expense.id
 
@@ -178,6 +179,7 @@ class ExpensesController < ApplicationController
     bulk_updates[:amount] = @expense.amount if @expense.saved_change_to_amount?
     bulk_updates[:category_id] = @expense.category_id if @expense.saved_change_to_category_id?
     bulk_updates[:credit_card_id] = @expense.credit_card_id if @expense.saved_change_to_credit_card_id?
+    bulk_updates[:bank_account_id] = @expense.bank_account_id if @expense.saved_change_to_bank_account_id?
 
     if bulk_updates.any?
       current_user.expenses
@@ -206,10 +208,13 @@ class ExpensesController < ApplicationController
   def propagate_payee_to_installment_group!
     return if @expense.installment_group_id.blank?
 
+    updates = { payee_id: @expense.payee_id }
+    updates[:bank_account_id] = @expense.bank_account_id if @expense.saved_change_to_bank_account_id?
+
     current_user.expenses
       .where(installment_group_id: @expense.installment_group_id)
       .where.not(id: @expense.id)
-      .update_all(payee_id: @expense.payee_id)
+      .update_all(updates)
   end
 
   def renumber_installments(group_id)
