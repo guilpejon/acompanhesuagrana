@@ -319,17 +319,17 @@ class ExpenseTest < ActiveSupport::TestCase
     assert_equal "scheduled", expense.payment_status
   end
 
-  test "boleto expense gets pending status by default" do
+  test "fixed boleto expense gets pending status by default" do
     user = create(:user)
     category = user.categories.first
-    expense = create(:expense, user: user, category: category, payment_method: "boleto")
+    expense = create(:expense, user: user, category: category, expense_type: "fixed", payment_method: "boleto")
     assert_equal "pending", expense.payment_status
   end
 
-  test "cash expense gets nil status by default" do
+  test "fixed cash expense gets nil status by default" do
     user = create(:user)
     category = user.categories.first
-    expense = create(:expense, user: user, category: category, payment_method: "cash")
+    expense = create(:expense, user: user, category: category, expense_type: "fixed", payment_method: "cash")
     assert_nil expense.payment_status
   end
 
@@ -499,5 +499,121 @@ class ExpenseTest < ActiveSupport::TestCase
     expense = create(:expense, user: user, category: category, amount: 100.00, payment_method: "pix", bank_account: bank_account, payment_status: "pending")
     expense.destroy
     assert_in_delta 1000.00, bank_account.reload.balance, 0.01
+  end
+
+  # Variable expense defaults and bank account sync on create
+
+  test "variable expense with pix defaults to paid on create" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    expense = create(:expense, user: user, category: category, expense_type: "variable", payment_method: "pix", bank_account: bank_account, date: Date.current)
+    assert_equal "paid", expense.payment_status
+  end
+
+  test "variable expense with cash defaults to paid on create" do
+    user = create(:user)
+    category = user.categories.first
+    expense = create(:expense, user: user, category: category, expense_type: "variable", payment_method: "cash", date: Date.current)
+    assert_equal "paid", expense.payment_status
+  end
+
+  test "variable expense with pix decrements bank account balance on create" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    create(:expense, user: user, category: category, expense_type: "variable", payment_method: "pix", bank_account: bank_account, amount: 150.00, date: Date.current)
+    assert_in_delta 850.00, bank_account.reload.balance, 0.01
+  end
+
+  test "variable expense with boleto decrements bank account balance on create" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    create(:expense, user: user, category: category, expense_type: "variable", payment_method: "boleto", bank_account: bank_account, amount: 200.00, date: Date.current)
+    assert_in_delta 800.00, bank_account.reload.balance, 0.01
+  end
+
+  test "variable expense with debito_automatico gets scheduled status (debito_automatico always scheduled)" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    expense = create(:expense, user: user, category: category, expense_type: "variable", payment_method: "debito_automatico", bank_account: bank_account, amount: 75.00, date: Date.current)
+    assert_equal "scheduled", expense.payment_status
+    assert_in_delta 1000.00, bank_account.reload.balance, 0.01
+  end
+
+  test "variable expense with cash does not change bank account balance on create" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    create(:expense, user: user, category: category, expense_type: "variable", payment_method: "cash", amount: 50.00, date: Date.current)
+    assert_in_delta 1000.00, bank_account.reload.balance, 0.01
+  end
+
+  test "variable expense with past date and pix decrements bank account balance on create" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    create(:expense, user: user, category: category, expense_type: "variable", payment_method: "pix", bank_account: bank_account, amount: 100.00, date: Date.current - 5.days)
+    assert_in_delta 900.00, bank_account.reload.balance, 0.01
+  end
+
+  test "destroying variable pix expense restores bank account balance" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    expense = create(:expense, user: user, category: category, expense_type: "variable", payment_method: "pix", bank_account: bank_account, amount: 100.00, date: Date.current)
+    # balance is now 900 after create
+    expense.destroy
+    assert_in_delta 1000.00, bank_account.reload.balance, 0.01
+  end
+
+  test "variable expense with future date is invalid" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    expense = build(:expense, user: user, category: category, expense_type: "variable", payment_method: "pix", bank_account: bank_account, date: Date.current + 1.day)
+    assert_not expense.valid?
+    assert expense.errors[:date].any?
+  end
+
+  test "variable expense with cash and future date is invalid" do
+    user = create(:user)
+    category = user.categories.first
+    expense = build(:expense, user: user, category: category, expense_type: "variable", payment_method: "cash", date: Date.current + 1.day)
+    assert_not expense.valid?
+    assert expense.errors[:date].any?
+  end
+
+  test "fixed boleto expense still defaults to pending" do
+    user = create(:user)
+    category = user.categories.first
+    expense = create(:expense, user: user, category: category, expense_type: "fixed", payment_method: "boleto", date: Date.current)
+    assert_equal "pending", expense.payment_status
+  end
+
+  test "fixed expense with future date is valid" do
+    user = create(:user)
+    category = user.categories.first
+    expense = build(:expense, user: user, category: category, expense_type: "fixed", payment_method: "cash", date: Date.current + 30.days)
+    assert expense.valid?
+  end
+
+  test "variable installment expense with future date is valid (installments span multiple months)" do
+    user = create(:user)
+    category = user.categories.first
+    expense = build(:expense, user: user, category: category, expense_type: "variable", payment_method: "boleto",
+                    total_installments: 3, installment_number: 2, date: Date.current + 1.month)
+    assert expense.valid?
+  end
+
+  test "variable non-installment expense with future date is still invalid" do
+    user = create(:user)
+    category = user.categories.first
+    expense = build(:expense, user: user, category: category, expense_type: "variable", payment_method: "boleto",
+                    total_installments: 1, installment_number: 1, date: Date.current + 1.day)
+    assert_not expense.valid?
+    assert expense.errors[:date].any?
   end
 end

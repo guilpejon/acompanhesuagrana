@@ -260,7 +260,7 @@ class ExpensesController < ApplicationController
       ActiveRecord::Base.transaction { records.each(&:save!) }
       redirect_to expenses_path, notice: t("controllers.expenses.created_installments", count: total_installments)
     else
-      @expense = records.first
+      @expense = records.find(&:invalid?) || records.first
       render_new_with_collections
     end
   end

@@ -17,6 +17,7 @@ class Expense < ApplicationRecord
   validates :recurrence_day, numericality: { in: 1..31 }, allow_nil: true
   validate :recurring_only_allowed_for_fixed
   validate :installment_cannot_be_recurring
+  validate :variable_expense_cannot_be_future_dated
   validates :payment_method, inclusion: { in: PAYMENT_METHODS }
   validates :total_installments, numericality: { in: 1..60 }
   validates :installment_number, numericality: { in: 1..60 }
@@ -26,6 +27,7 @@ class Expense < ApplicationRecord
   before_validation :clear_bank_account_unless_bank_debit_method
   before_create :set_default_payment_status
 
+  after_create :sync_bank_account_on_create
   after_update :sync_bank_account_balance
   before_destroy :restore_bank_account_if_paid
 
@@ -100,8 +102,21 @@ class Expense < ApplicationRecord
     return if payment_status.present?
     if scheduled_payment?
       self.payment_status = "scheduled"
+    elsif expense_type == "variable"
+      self.payment_status = "paid"
     elsif payment_method == "boleto"
       self.payment_status = "pending"
     end
+  end
+
+  def variable_expense_cannot_be_future_dated
+    return unless expense_type == "variable"
+    return if installment?
+    errors.add(:date, :variable_future) if date.present? && date > Date.current
+  end
+
+  def sync_bank_account_on_create
+    return unless bank_account.present? && payment_status == "paid"
+    bank_account.decrement!(:balance, amount)
   end
 end

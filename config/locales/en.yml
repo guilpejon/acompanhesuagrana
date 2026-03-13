@@ -1,5 +1,11 @@
 en:
   activerecord:
+    errors:
+      models:
+        expense:
+          attributes:
+            date:
+              variable_future: "cannot be in the future for variable expenses"
     attributes:
       expense:
         bank_account_id: "Bank account"

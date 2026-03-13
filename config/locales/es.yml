@@ -4,6 +4,12 @@ es:
     description: "Controla tus ingresos, gastos e inversiones en un solo lugar."
 
   activerecord:
+    errors:
+      models:
+        expense:
+          attributes:
+            date:
+              variable_future: "no puede ser una fecha futura para gastos variables"
     attributes:
       expense:
         description: "Descripción"

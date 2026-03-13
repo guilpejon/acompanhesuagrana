@@ -528,9 +528,9 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
 
   test "DELETE destroy with delete_following removes recurring future expenses" do
     template = create(:expense, user: @user, category: @category, expense_type: "fixed", recurring: true, date: 2.months.ago)
-    future1 = create(:expense, user: @user, category: @category, recurring_source_id: template.id, date: 1.month.from_now)
-    future2 = create(:expense, user: @user, category: @category, recurring_source_id: template.id, date: 2.months.from_now)
-    past = create(:expense, user: @user, category: @category, recurring_source_id: template.id, date: 1.month.ago)
+    future1 = create(:expense, user: @user, category: @category, expense_type: "fixed", recurring_source_id: template.id, date: 1.month.from_now)
+    future2 = create(:expense, user: @user, category: @category, expense_type: "fixed", recurring_source_id: template.id, date: 2.months.from_now)
+    past = create(:expense, user: @user, category: @category, expense_type: "fixed", recurring_source_id: template.id, date: 1.month.ago)
 
     sign_in @user
     delete expense_path(future1), params: { delete_following: "1" }
@@ -641,7 +641,7 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "PATCH update_status from paid restores linked bank account balance" do
-    bank_account = create(:bank_account, user: @user, balance: 850.00)
+    bank_account = create(:bank_account, user: @user, balance: 1000.00)
     expense = create(:expense, user: @user, category: @category, amount: 150.00,
                      payment_method: "pix", bank_account: bank_account, payment_status: "paid")
     sign_in @user
@@ -650,7 +650,7 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "DELETE destroy paid expense with bank account restores balance" do
-    bank_account = create(:bank_account, user: @user, balance: 850.00)
+    bank_account = create(:bank_account, user: @user, balance: 1000.00)
     expense = create(:expense, user: @user, category: @category, amount: 150.00,
                      payment_method: "pix", bank_account: bank_account, payment_status: "paid")
     sign_in @user
