@@ -1,4 +1,9 @@
 en:
+  activerecord:
+    attributes:
+      expense:
+        bank_account_id: "Bank account"
+
   app:
     name: "Monitore sua Grana"
     description: "Track your income, expenses, and investments all in one place."
@@ -154,6 +159,8 @@ en:
       variable: "Variable"
       fixed: "Fixed"
       select_card: "— Select Card —"
+      bank_account: "Bank Account"
+      no_bank_account: "No account"
       installments: "Installments"
       per_installment: "Per installment:"
       installment_label: "Installment"

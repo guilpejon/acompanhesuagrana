@@ -629,4 +629,32 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2, inst3.reload.installment_number
     assert_equal 2, inst2.reload.total_installments
   end
+
+  # Bank account auto-debit via update_status
+  test "PATCH update_status to paid decrements linked bank account balance" do
+    bank_account = create(:bank_account, user: @user, balance: 1000.00)
+    expense = create(:expense, user: @user, category: @category, amount: 150.00,
+                     payment_method: "pix", bank_account: bank_account, payment_status: "scheduled")
+    sign_in @user
+    patch update_status_expense_path(expense)
+    assert_in_delta 850.00, bank_account.reload.balance, 0.01
+  end
+
+  test "PATCH update_status from paid restores linked bank account balance" do
+    bank_account = create(:bank_account, user: @user, balance: 850.00)
+    expense = create(:expense, user: @user, category: @category, amount: 150.00,
+                     payment_method: "pix", bank_account: bank_account, payment_status: "paid")
+    sign_in @user
+    patch update_status_expense_path(expense)
+    assert_in_delta 1000.00, bank_account.reload.balance, 0.01
+  end
+
+  test "DELETE destroy paid expense with bank account restores balance" do
+    bank_account = create(:bank_account, user: @user, balance: 850.00)
+    expense = create(:expense, user: @user, category: @category, amount: 150.00,
+                     payment_method: "pix", bank_account: bank_account, payment_status: "paid")
+    sign_in @user
+    delete expense_path(expense), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    assert_in_delta 1000.00, bank_account.reload.balance, 0.01
+  end
 end

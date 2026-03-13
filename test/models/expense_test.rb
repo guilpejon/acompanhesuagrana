@@ -388,4 +388,116 @@ class ExpenseTest < ActiveSupport::TestCase
     expense = build(:expense, payment_method: "boleto", payment_status: "paid")
     assert_equal "pending", expense.next_payment_status
   end
+
+  # scheduled_payment? for bank-debit installments
+  test "scheduled_payment? returns true for boleto installment" do
+    expense = build(:expense, payment_method: "boleto", total_installments: 3, installment_number: 1)
+    assert expense.scheduled_payment?
+  end
+
+  test "scheduled_payment? returns true for debito_automatico installment" do
+    expense = build(:expense, payment_method: "debito_automatico", total_installments: 3, installment_number: 1)
+    assert expense.scheduled_payment?
+  end
+
+  test "scheduled_payment? returns false for standalone boleto (non-installment, non-recurring)" do
+    expense = build(:expense, payment_method: "boleto", total_installments: 1, recurring: false)
+    assert_not expense.scheduled_payment?
+  end
+
+  test "boleto installment gets scheduled status by default" do
+    user = create(:user)
+    category = user.categories.first
+    expense = create(:expense, user: user, category: category, payment_method: "boleto",
+                     total_installments: 3, installment_number: 1)
+    assert_equal "scheduled", expense.payment_status
+  end
+
+  test "boleto installment cycles scheduled -> paid (two-state)" do
+    expense = build(:expense, payment_method: "boleto", total_installments: 3, installment_number: 1,
+                    payment_status: "scheduled")
+    assert_equal "paid", expense.next_payment_status
+  end
+
+  test "boleto installment cycles paid -> scheduled (two-state)" do
+    expense = build(:expense, payment_method: "boleto", total_installments: 3, installment_number: 1,
+                    payment_status: "paid")
+    assert_equal "scheduled", expense.next_payment_status
+  end
+
+  # Bank account auto-debit tests
+  test "bank_account_id is cleared when payment method is not in BANK_DEBIT_METHODS" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 500.00)
+    expense = create(:expense, user: user, category: category, payment_method: "pix", bank_account: bank_account)
+    expense.update!(payment_method: "credit_card")
+    assert_nil expense.reload.bank_account_id
+  end
+
+  test "bank_account_id is preserved when payment method is pix" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 500.00)
+    expense = create(:expense, user: user, category: category)
+    expense.update!(payment_method: "pix", bank_account: bank_account)
+    assert_equal bank_account.id, expense.reload.bank_account_id
+  end
+
+  test "bank_account_id is preserved when payment method is boleto" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 500.00)
+    expense = create(:expense, user: user, category: category)
+    expense.update!(payment_method: "boleto", bank_account: bank_account)
+    assert_equal bank_account.id, expense.reload.bank_account_id
+  end
+
+  test "bank_account_id is preserved when payment method is debito_automatico" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 500.00)
+    expense = create(:expense, user: user, category: category)
+    expense.update!(payment_method: "debito_automatico", bank_account: bank_account)
+    assert_equal bank_account.id, expense.reload.bank_account_id
+  end
+
+  test "marking expense as paid decrements bank account balance" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    expense = create(:expense, user: user, category: category, amount: 100.00, payment_method: "pix", bank_account: bank_account, payment_status: "pending")
+    expense.update!(payment_status: "paid")
+    assert_in_delta 900.00, bank_account.reload.balance, 0.01
+  end
+
+  test "toggling expense back from paid increments bank account balance" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    expense = create(:expense, user: user, category: category, amount: 100.00, payment_method: "pix", bank_account: bank_account, payment_status: "pending")
+    expense.update!(payment_status: "paid")
+    expense.update!(payment_status: "pending")
+    assert_in_delta 1000.00, bank_account.reload.balance, 0.01
+  end
+
+  test "destroying a paid expense with bank account restores the balance" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    expense = create(:expense, user: user, category: category, amount: 100.00, payment_method: "pix", bank_account: bank_account, payment_status: "pending")
+    expense.update!(payment_status: "paid")
+    # balance is now 900 after marking paid
+    expense.destroy
+    assert_in_delta 1000.00, bank_account.reload.balance, 0.01
+  end
+
+  test "destroying a non-paid expense does not change bank account balance" do
+    user = create(:user)
+    category = user.categories.first
+    bank_account = create(:bank_account, user: user, balance: 1000.00)
+    expense = create(:expense, user: user, category: category, amount: 100.00, payment_method: "pix", bank_account: bank_account, payment_status: "pending")
+    expense.destroy
+    assert_in_delta 1000.00, bank_account.reload.balance, 0.01
+  end
 end

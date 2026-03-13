@@ -17,6 +17,7 @@ es:
         total_installments: "Cuotas"
         installment_number: "Número de cuota"
         payment_status: "Estado del pago"
+        bank_account_id: "Cuenta bancaria"
       income:
         description: "Descripción"
         amount: "Importe"
@@ -195,6 +196,8 @@ es:
       variable: "Variable"
       fixed: "Fijo"
       select_card: "— Seleccionar Tarjeta —"
+      bank_account: "Cuenta Bancaria"
+      no_bank_account: "Sin cuenta"
       installments: "Cuotas"
       per_installment: "Por cuota:"
       installment_label: "Cuota"

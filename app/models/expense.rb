@@ -2,10 +2,12 @@ class Expense < ApplicationRecord
   belongs_to :user
   belongs_to :category
   belongs_to :credit_card, optional: true
+  belongs_to :bank_account, optional: true
   belongs_to :payee, optional: true
 
   TYPES = %w[fixed variable].freeze
   PAYMENT_METHODS = %w[cash pix boleto credit_card debito_automatico].freeze
+  BANK_DEBIT_METHODS = %w[pix boleto debito_automatico].freeze
   PAYMENT_STATUSES = %w[pending scheduled paid].freeze
 
   validates :description, length: { maximum: 255 }, allow_blank: true
@@ -21,7 +23,11 @@ class Expense < ApplicationRecord
   validates :payment_status, inclusion: { in: PAYMENT_STATUSES }, allow_nil: true
 
   before_validation :clear_credit_card_unless_credit_card_method
+  before_validation :clear_bank_account_unless_bank_debit_method
   before_create :set_default_payment_status
+
+  after_update :sync_bank_account_balance
+  before_destroy :restore_bank_account_if_paid
 
   def installment?
     total_installments > 1
@@ -37,6 +43,7 @@ class Expense < ApplicationRecord
 
   def scheduled_payment?
     payment_method == "debito_automatico" ||
+      (installment? && payment_method.in?(BANK_DEBIT_METHODS)) ||
       (recurring? && payment_method.in?(%w[credit_card pix])) ||
       (installment? && payment_method == "pix")
   end
@@ -70,12 +77,31 @@ class Expense < ApplicationRecord
     self.credit_card_id = nil unless payment_method == "credit_card"
   end
 
+  def clear_bank_account_unless_bank_debit_method
+    self.bank_account_id = nil unless payment_method.in?(BANK_DEBIT_METHODS)
+  end
+
+  def sync_bank_account_balance
+    return unless bank_account.present? && saved_change_to_payment_status?
+    was, now = saved_change_to_payment_status
+    if now == "paid" && was != "paid"
+      bank_account.decrement!(:balance, amount)
+    elsif was == "paid" && now != "paid"
+      bank_account.increment!(:balance, amount)
+    end
+  end
+
+  def restore_bank_account_if_paid
+    return unless bank_account.present? && payment_status == "paid"
+    bank_account.increment!(:balance, amount)
+  end
+
   def set_default_payment_status
     return if payment_status.present?
-    if payment_method == "boleto"
-      self.payment_status = "pending"
-    elsif scheduled_payment?
+    if scheduled_payment?
       self.payment_status = "scheduled"
+    elsif payment_method == "boleto"
+      self.payment_status = "pending"
     end
   end
 end

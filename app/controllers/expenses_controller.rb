@@ -13,6 +13,7 @@ class ExpensesController < ApplicationController
 
     @categories = current_user.categories.order(:name)
     @credit_cards = current_user.credit_cards.order(:name)
+    @bank_accounts = current_user.bank_accounts.order(:name)
 
     totals = current_user.expenses.for_month(@current_date).group(:expense_type).sum(:amount)
     @fixed_total = totals["fixed"] || 0
@@ -23,6 +24,7 @@ class ExpensesController < ApplicationController
   def new
     @categories = current_user.categories.order(:name)
     @credit_cards = current_user.credit_cards.order(:name)
+    @bank_accounts = current_user.bank_accounts.order(:name)
     @expense = current_user.expenses.build(date: @current_date, expense_type: "variable", category: @categories.first, credit_card_id: current_user.default_credit_card_id)
     @quick = params[:quick].present?
   end
@@ -47,6 +49,7 @@ class ExpensesController < ApplicationController
   def edit
     @categories = current_user.categories.order(:name)
     @credit_cards = current_user.credit_cards.order(:name)
+    @bank_accounts = current_user.bank_accounts.order(:name)
   end
 
   def update
@@ -75,6 +78,7 @@ class ExpensesController < ApplicationController
     else
       @categories = current_user.categories.order(:name)
       @credit_cards = current_user.credit_cards.order(:name)
+      @bank_accounts = current_user.bank_accounts.order(:name)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -146,7 +150,7 @@ class ExpensesController < ApplicationController
   def expense_params
     params.require(:expense).permit(
       :description, :amount, :date, :expense_type, :category_id, :credit_card_id,
-      :recurring, :recurrence_day, :payment_method, :total_installments,
+      :bank_account_id, :recurring, :recurrence_day, :payment_method, :total_installments,
       :installment_number, :installment_group_id, :payee_id, :payment_status
     )
   end
@@ -222,6 +226,7 @@ class ExpensesController < ApplicationController
   def render_new_with_collections
     @categories = current_user.categories.order(:name)
     @credit_cards = current_user.credit_cards.order(:name)
+    @bank_accounts = current_user.bank_accounts.order(:name)
     render :new, status: :unprocessable_entity
   end
 

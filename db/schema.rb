@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_09_235533) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_12_225202) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,6 +56,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_09_235533) do
 
   create_table "expenses", force: :cascade do |t|
     t.decimal "amount", precision: 10, scale: 2, null: false
+    t.bigint "bank_account_id"
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.bigint "credit_card_id"
@@ -73,6 +74,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_09_235533) do
     t.integer "total_installments", default: 1, null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["bank_account_id"], name: "index_expenses_on_bank_account_id"
     t.index ["category_id"], name: "index_expenses_on_category_id"
     t.index ["credit_card_id"], name: "index_expenses_on_credit_card_id"
     t.index ["payee_id"], name: "index_expenses_on_payee_id"
@@ -161,6 +163,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_09_235533) do
   add_foreign_key "bank_accounts", "users"
   add_foreign_key "categories", "users"
   add_foreign_key "credit_cards", "users"
+  add_foreign_key "expenses", "bank_accounts"
   add_foreign_key "expenses", "categories"
   add_foreign_key "expenses", "credit_cards"
   add_foreign_key "expenses", "payees"

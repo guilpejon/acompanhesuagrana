@@ -17,6 +17,7 @@ pt-BR:
         total_installments: "Parcelas"
         installment_number: "Número da parcela"
         payment_status: "Status do pagamento"
+        bank_account_id: "Conta bancária"
       income:
         description: "Descrição"
         amount: "Valor"
@@ -195,6 +196,8 @@ pt-BR:
       variable: "Variável"
       fixed: "Fixo"
       select_card: "— Selecionar Cartão —"
+      bank_account: "Conta Bancária"
+      no_bank_account: "Sem conta"
       installments: "Parcelas"
       per_installment: "Por parcela:"
       installment_label: "Parcela"

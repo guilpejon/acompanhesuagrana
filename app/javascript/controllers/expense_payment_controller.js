@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "creditCardField",
+    "bankAccountField",
     "installmentsField",
     "installments",
     "amount",
@@ -34,10 +35,15 @@ export default class extends Controller {
   updateVisibility() {
     const method = this.selectedMethod()
     const showCreditCard = method === "credit_card"
+    const showBankAccount = ["pix", "boleto", "debito_automatico"].includes(method)
     const showInstallments = ["credit_card", "boleto", "debito_automatico", "pix_automatico"].includes(method)
 
     if (this.hasCreditCardFieldTarget) {
       this.creditCardFieldTarget.style.display = showCreditCard ? "" : "none"
+    }
+
+    if (this.hasBankAccountFieldTarget) {
+      this.bankAccountFieldTarget.style.display = showBankAccount ? "" : "none"
     }
 
     if (this.hasInstallmentsFieldTarget) {
