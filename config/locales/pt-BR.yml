@@ -414,6 +414,9 @@ pt-BR:
       delete_confirm: "Excluir esta categoria? As despesas perderão sua categoria."
       delete_modal_title: "Excluir categoria"
       no_categories: "Nenhuma categoria ainda"
+      set_default: "Definir como padrão"
+      unset_default: "Remover padrão"
+      default_badge: "Padrão"
     new:
       title: "Nova Categoria"
     edit:
@@ -423,6 +426,7 @@ pt-BR:
       name_placeholder: "ex: Assinaturas"
       color: "Cor *"
       icon: "Ícone"
+      set_as_default: "Definir como categoria padrão"
       add: "Criar Categoria"
       update: "Atualizar Categoria"
       cancel: "Cancelar"
@@ -699,6 +703,8 @@ pt-BR:
       created: "Categoria criada."
       updated: "Categoria atualizada."
       destroyed: "Categoria excluída."
+      default_set: "Categoria padrão definida."
+      default_cleared: "Categoria padrão removida."
     payees:
       created: "Beneficiário criado."
       updated: "Beneficiário atualizado."

@@ -414,6 +414,9 @@ es:
       delete_confirm: "¿Eliminar esta categoría? Los gastos perderán su categoría."
       delete_modal_title: "Eliminar categoría"
       no_categories: "Aún no hay categorías"
+      set_default: "Establecer por defecto"
+      unset_default: "Quitar por defecto"
+      default_badge: "Por defecto"
     new:
       title: "Nueva Categoría"
     edit:
@@ -423,6 +426,7 @@ es:
       name_placeholder: "ej. Suscripciones"
       color: "Color *"
       icon: "Ícono"
+      set_as_default: "Establecer como categoría por defecto"
       add: "Crear Categoría"
       update: "Actualizar Categoría"
       cancel: "Cancelar"
@@ -699,6 +703,8 @@ es:
       created: "Categoría creada."
       updated: "Categoría actualizada."
       destroyed: "Categoría eliminada."
+      default_set: "Categoría por defecto establecida."
+      default_cleared: "Categoría por defecto eliminada."
     payees:
       created: "Beneficiario creado."
       updated: "Beneficiario actualizado."

@@ -41,6 +41,12 @@
     <% end %>
   </div>
 
+  <div class="flex items-center gap-3">
+    <%= check_box_tag :set_as_default, "1", current_user.default_category_id == category.id,
+        class: "w-4 h-4 rounded", style: "accent-color: #6C63FF;" %>
+    <label class="text-sm" style="color: #8892A4;"><%= t("categories.form.set_as_default") %></label>
+  </div>
+
   <div class="flex gap-3 pt-2">
     <%= f.submit category.new_record? ? t("categories.form.add") : t("categories.form.update"), class: "flex-1 py-2.5 rounded-lg text-sm font-semibold cursor-pointer transition-colors hover:opacity-90", style: "background-color: #6C63FF; color: white;" %>
     <%= link_to t("categories.form.cancel"), categories_path, class: "px-4 py-2.5 rounded-lg text-sm font-medium transition-colors hover:bg-white/5", style: "color: #8892A4;" %>

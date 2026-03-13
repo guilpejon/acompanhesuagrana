@@ -103,4 +103,39 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     delete category_path(other_category)
     assert_response :not_found
   end
+
+  test "PATCH set_default sets category as user default" do
+    sign_in @user
+    patch set_default_category_path(@category)
+    assert_redirected_to categories_path
+    assert_equal I18n.t("controllers.categories.default_set"), flash[:notice]
+    assert_equal @category.id, @user.reload.default_category_id
+  end
+
+  test "PATCH set_default clears default when category is already the default" do
+    @user.update!(default_category_id: @category.id)
+    sign_in @user
+    patch set_default_category_path(@category)
+    assert_redirected_to categories_path
+    assert_equal I18n.t("controllers.categories.default_cleared"), flash[:notice]
+    assert_nil @user.reload.default_category_id
+  end
+
+  test "cannot set default on other user's category" do
+    other_user = create(:user)
+    other_category = other_user.categories.first
+
+    sign_in @user
+    patch set_default_category_path(other_category)
+    assert_response :not_found
+  end
+
+  test "destroying default category clears user default" do
+    @user.update!(default_category_id: @category.id)
+    sign_in @user
+    assert_difference "Category.count", -1 do
+      delete category_path(@category)
+    end
+    assert_nil @user.reload.default_category_id
+  end
 end

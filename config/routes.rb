@@ -26,7 +26,11 @@ Rails.application.routes.draw do
     end
   end
   resources :bank_accounts
-  resources :categories
+  resources :categories do
+    member do
+      patch :set_default
+    end
+  end
   resources :payees
   resources :possessions
   get "/forecast", to: "forecast#index", as: :forecast

@@ -25,7 +25,8 @@ class ExpensesController < ApplicationController
     @categories = current_user.categories.order(:name)
     @credit_cards = current_user.credit_cards.order(:name)
     @bank_accounts = current_user.bank_accounts.order(:name)
-    @expense = current_user.expenses.build(date: @current_date, expense_type: "variable", category: @categories.first, credit_card_id: current_user.default_credit_card_id)
+    default_category = @categories.find { |c| c.id == current_user.default_category_id } || @categories.first
+    @expense = current_user.expenses.build(date: @current_date, expense_type: "variable", category: default_category, credit_card_id: current_user.default_credit_card_id)
     @quick = params[:quick].present?
   end
 

@@ -377,6 +377,9 @@ en:
       delete_confirm: "Delete this category? Expenses will lose their category."
       delete_modal_title: "Delete category"
       no_categories: "No categories yet"
+      set_default: "Set as default"
+      unset_default: "Remove default"
+      default_badge: "Default"
     new:
       title: "New Category"
     edit:
@@ -386,6 +389,7 @@ en:
       name_placeholder: "e.g. Subscriptions"
       color: "Color *"
       icon: "Icon"
+      set_as_default: "Set as default category"
       add: "Create Category"
       update: "Update Category"
       cancel: "Cancel"
@@ -662,6 +666,8 @@ en:
       created: "Category created."
       updated: "Category updated."
       destroyed: "Category deleted."
+      default_set: "Default category set."
+      default_cleared: "Default category removed."
     payees:
       created: "Payee created."
       updated: "Payee updated."
