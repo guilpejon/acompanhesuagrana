@@ -40,6 +40,14 @@
     <script src="<%= asset_path('chart.umd.js') %>"></script>
     <%= javascript_importmap_tags %>
     <script>if(localStorage.getItem('values-hidden')==='true'){document.documentElement.classList.add('values-hidden')}</script>
+    <%# Google Analytics %>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C4HYFN3T27"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-C4HYFN3T27');
+    </script>
   </head>
 
   <body class="h-full" style="background-color: #0F1117; color: #E2E8F0; font-family: 'Inter', system-ui, sans-serif;">

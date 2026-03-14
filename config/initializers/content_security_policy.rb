@@ -12,10 +12,11 @@ Rails.application.configure do
     policy.object_src  :none
     # unsafe-inline is required for chartkick's inline <script> tags and
     # for Tailwind inline styles used throughout views.
-    policy.script_src  :self, :unsafe_inline
+    policy.script_src  :self, :unsafe_inline,
+                       "https://www.googletagmanager.com"
     policy.style_src   :self, :unsafe_inline,
                        "https://fonts.googleapis.com"
-    policy.connect_src :self
+    policy.connect_src :self, "https://www.google-analytics.com"
     # Prevent this app from being embedded in iframes (clickjacking protection)
     policy.frame_ancestors :none
   end
