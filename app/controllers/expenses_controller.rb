@@ -3,15 +3,13 @@ class ExpensesController < ApplicationController
   before_action :prevent_locked_edit, only: %i[edit update]
 
   def index
-    base = current_user.expenses
-      .includes(:category, :credit_card)
-      .for_month(@current_date)
-      .ordered
+    base = current_user.expenses.includes(:category, :credit_card).for_month(@current_date)
 
-    @fixed_expenses = base.fixed
-    @variable_expenses = base.variable
-    @variable_regular_expenses = @variable_expenses.reject(&:installment?)
-    @variable_installment_expenses = @variable_expenses.select(&:installment?)
+    @fixed_expenses = base.fixed.ordered
+
+    variable_base = base.variable.order(date: :desc)
+    @variable_regular_expenses = variable_base.reject(&:installment?)
+    @variable_installment_expenses = variable_base.select(&:installment?)
     @variable_installment_total = @variable_installment_expenses.sum(&:amount)
     @variable_regular_total = @variable_regular_expenses.sum(&:amount)
 

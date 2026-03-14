@@ -803,4 +803,58 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     assert_select "#expense_#{regular.id}[data-section='installment']", count: 0
     assert_select "#expense_#{regular.id}[data-section='variable']"
   end
+
+  test "GET index installment expenses section is a separate top-level section from variable other" do
+    group_id = SecureRandom.uuid
+    create(:expense, user: @user, category: @category, description: "Laptop 1/3",
+           expense_type: "variable", date: Date.current,
+           installment_group_id: group_id, installment_number: 1, total_installments: 3)
+    create(:expense, user: @user, category: @category, description: "Coffee",
+           expense_type: "variable", date: Date.current)
+
+    sign_in @user
+    get expenses_path
+
+    # Both sections exist independently
+    assert_select "#installment_expenses_list"
+    assert_select "#variable_expenses_list"
+    # installment section header uses installment_expenses key
+    assert_match I18n.t("expenses.index.installment_expenses"), response.body
+    # variable other section header uses variable_other key
+    assert_match I18n.t("expenses.index.variable_other"), response.body
+    # fixed section still present
+    assert_match I18n.t("expenses.index.fixed_expenses"), response.body
+  end
+
+  test "GET index variable regular expenses are ordered most recent first" do
+    older = create(:expense, user: @user, category: @category, description: "Older Expense",
+                   expense_type: "variable", date: Date.current - 5.days)
+    newer = create(:expense, user: @user, category: @category, description: "Newer Expense",
+                   expense_type: "variable", date: Date.current)
+
+    sign_in @user
+    get expenses_path
+
+    newer_pos = response.body.index("Newer Expense")
+    older_pos = response.body.index("Older Expense")
+    assert newer_pos < older_pos, "Newer expense should appear before older expense"
+  end
+
+  test "GET index variable installment expenses are ordered most recent first" do
+    group1 = SecureRandom.uuid
+    group2 = SecureRandom.uuid
+    older_inst = create(:expense, user: @user, category: @category, description: "Old TV 1/3",
+                        expense_type: "variable", date: Date.current - 5.days,
+                        installment_group_id: group1, installment_number: 1, total_installments: 3)
+    newer_inst = create(:expense, user: @user, category: @category, description: "New Phone 1/3",
+                        expense_type: "variable", date: Date.current,
+                        installment_group_id: group2, installment_number: 1, total_installments: 3)
+
+    sign_in @user
+    get expenses_path
+
+    newer_pos = response.body.index("New Phone 1/3")
+    older_pos = response.body.index("Old TV 1/3")
+    assert newer_pos < older_pos, "Newer installment should appear before older installment"
+  end
 end

@@ -46,7 +46,7 @@ class ForecastController < ApplicationController
 
       income_data = {}
       (1..31).each do |d|
-        income_data[d] = (@actual_income_total.to_f * [d, total_days].min / total_days).round(2)
+        income_data[d] = (@actual_income_total.to_f * [ d, total_days ].min / total_days).round(2)
       end
 
       @monthly_spending_chart_data = [
@@ -156,13 +156,13 @@ class ForecastController < ApplicationController
         end
       elsif @projected_total > 0
         (1..31).each do |d|
-          spending_data[d] = (@projected_total.to_f * [d, total_days].min / total_days).round(2)
+          spending_data[d] = (@projected_total.to_f * [ d, total_days ].min / total_days).round(2)
         end
       end
 
       income_data = {}
       (1..31).each do |d|
-        income_data[d] = (@projected_income.to_f * [d, total_days].min / total_days).round(2)
+        income_data[d] = (@projected_income.to_f * [ d, total_days ].min / total_days).round(2)
       end
 
       spending_label = is_current_month ? I18n.t("forecast.index.actual_spending") : I18n.t("forecast.index.projected_spending")
