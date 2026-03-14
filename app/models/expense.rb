@@ -47,6 +47,10 @@ TYPES = %w[fixed variable].freeze
       (recurring? && payment_method.in?(%w[credit_card pix]))
   end
 
+  def credit_card_installment?
+    payment_method == "credit_card" && installment?
+  end
+
   def next_payment_status
     if scheduled_payment?
       payment_status == "scheduled" ? "paid" : "scheduled"

@@ -23,7 +23,12 @@ class CategoriesController < ApplicationController
       when "1y"            then 12.months.ago.beginning_of_month.to_date
       else nil
       end
-      end_date = timeframe == "last_month" ? 1.month.ago.end_of_month.to_date : nil
+      end_date = case timeframe
+      when "current_month" then Date.current.end_of_month
+      when "last_month"    then 1.month.ago.end_of_month.to_date
+      when "3m", "6m", "1y" then Date.current
+      else nil
+      end
     end
 
     @period_label = period_label_for(timeframe, start_date, end_date)

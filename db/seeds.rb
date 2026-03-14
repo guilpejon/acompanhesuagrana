@@ -4,8 +4,8 @@
 puts "Criando usuário demo..."
 
 user = User.find_or_create_by!(email: "demo@monitoresuagrana.com.br") do |u|
-  u.password = "password"
-  u.password_confirmation = "password"
+  u.password = "senha"
+  u.password_confirmation = "senha"
   u.name = "Usuário Demo"
   u.currency = "BRL"
 end
@@ -92,7 +92,8 @@ expenses_data = [
   { desc: "Spotify",          amount: 19.90,   type: "fixed",    cat: entertainment, recurring: true,  day: 3,  card: nubank, payment: "credit_card" },
   { desc: "Farmácia",         amount: 87.30,   type: "variable", cat: health,        recurring: false, day: 6,  card: nil,    payment: "cash" },
   { desc: "Notebook",         amount: 320.00,  type: "variable", cat: education,     recurring: false, day: 5,  card: nil,    payment: "boleto", installments: 6 },
-  { desc: "Sofá",             amount: 416.67,  type: "variable", cat: shopping,      recurring: false, day: 15, card: nil,    payment: "pix",    installments: 3 }
+  { desc: "Sofá",             amount: 416.67,  type: "variable", cat: shopping,      recurring: false, day: 15, card: nil,    payment: "pix",    installments: 3 },
+  { desc: "TV Samsung 55\"",  amount: 299.90,  type: "variable", cat: shopping,      recurring: false, day: 10, card: nubank, payment: "credit_card", installments: 6 }
 ]
 
 # Pre-generate installment group IDs so all installments for the same purchase share one ID

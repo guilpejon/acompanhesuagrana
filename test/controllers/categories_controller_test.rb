@@ -77,6 +77,54 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "GET show with current_month excludes expenses from future months" do
+    sign_in @user
+    current_expense = create(:expense, user: @user, category: @category, date: Date.current)
+    future_expense  = create(:expense, user: @user, category: @category, date: 1.month.from_now.to_date, expense_type: "fixed")
+
+    get category_path(@category, timeframe: "current_month")
+    assert_response :success
+
+    assert_includes response.body, current_expense.description
+    assert_not_includes response.body, future_expense.description
+  end
+
+  test "GET show with 3m excludes expenses from future months" do
+    sign_in @user
+    recent_expense = create(:expense, user: @user, category: @category, date: 1.month.ago.to_date)
+    future_expense = create(:expense, user: @user, category: @category, date: 1.month.from_now.to_date, expense_type: "fixed")
+
+    get category_path(@category, timeframe: "3m")
+    assert_response :success
+
+    assert_includes response.body, recent_expense.description
+    assert_not_includes response.body, future_expense.description
+  end
+
+  test "GET show with 6m excludes expenses from future months" do
+    sign_in @user
+    recent_expense = create(:expense, user: @user, category: @category, date: 3.months.ago.to_date)
+    future_expense = create(:expense, user: @user, category: @category, date: 1.month.from_now.to_date, expense_type: "fixed")
+
+    get category_path(@category, timeframe: "6m")
+    assert_response :success
+
+    assert_includes response.body, recent_expense.description
+    assert_not_includes response.body, future_expense.description
+  end
+
+  test "GET show with 1y excludes expenses from future months" do
+    sign_in @user
+    recent_expense = create(:expense, user: @user, category: @category, date: 6.months.ago.to_date)
+    future_expense = create(:expense, user: @user, category: @category, date: 1.month.from_now.to_date, expense_type: "fixed")
+
+    get category_path(@category, timeframe: "1y")
+    assert_response :success
+
+    assert_includes response.body, recent_expense.description
+    assert_not_includes response.body, future_expense.description
+  end
+
   test "cannot access another user's category show page" do
     other_user = create(:user)
     other_category = other_user.categories.create!(name: "UniqueCatGHI", color: "#FF5733", icon: "tag")

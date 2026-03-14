@@ -195,6 +195,10 @@ en:
         question: "Do you want to delete only this installment or this and all remaining ones?"
         confirm: "Delete only this"
         this_and_following: "Delete this and remaining"
+      cc_installment_delete:
+        title: "Delete credit card installments"
+        question: "This will delete all installments in this group. This action cannot be undone."
+        confirm: "Delete all installments"
     payment_statuses:
       pending: "Not Scheduled"
       scheduled: "Scheduled"

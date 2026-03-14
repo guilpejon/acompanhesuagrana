@@ -618,9 +618,9 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
 
   test "DELETE destroy single installment renumbers remaining" do
     group_id = SecureRandom.uuid
-    inst1 = create(:expense, user: @user, category: @category, installment_group_id: group_id, installment_number: 1, total_installments: 3)
-    inst2 = create(:expense, user: @user, category: @category, installment_group_id: group_id, installment_number: 2, total_installments: 3)
-    inst3 = create(:expense, user: @user, category: @category, installment_group_id: group_id, installment_number: 3, total_installments: 3)
+    inst1 = create(:expense, user: @user, category: @category, payment_method: "boleto", installment_group_id: group_id, installment_number: 1, total_installments: 3)
+    inst2 = create(:expense, user: @user, category: @category, payment_method: "boleto", installment_group_id: group_id, installment_number: 2, total_installments: 3)
+    inst3 = create(:expense, user: @user, category: @category, payment_method: "boleto", installment_group_id: group_id, installment_number: 3, total_installments: 3)
 
     sign_in @user
     delete expense_path(inst1)
@@ -733,6 +733,62 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     assert_select "#installment_expenses_list #expense_#{installment.id}"
     # variable_expenses_list should not contain it
     assert_select "#variable_expenses_list #expense_#{installment.id}", count: 0
+  end
+
+  # CC installment special treatment
+  test "GET edit blocks CC installment number > 1 regardless of date" do
+    group_id = SecureRandom.uuid
+    cc_installment = create(:expense, user: @user, category: @category,
+                            payment_method: "credit_card", total_installments: 3,
+                            installment_number: 2, installment_group_id: group_id,
+                            date: Date.current)
+    sign_in @user
+    get edit_expense_path(cc_installment)
+    assert_redirected_to expenses_path
+    assert_equal I18n.t("controllers.expenses.edit_locked"), flash[:alert]
+  end
+
+  test "GET edit allows CC installment number 1 (original purchase)" do
+    group_id = SecureRandom.uuid
+    cc_installment_1 = create(:expense, user: @user, category: @category,
+                              payment_method: "credit_card", total_installments: 3,
+                              installment_number: 1, installment_group_id: group_id,
+                              date: Date.current)
+    sign_in @user
+    get edit_expense_path(cc_installment_1)
+    assert_response :success
+  end
+
+  test "DELETE destroy CC installment 1 deletes all group installments without delete_following param" do
+    group_id = SecureRandom.uuid
+    create(:expense, user: @user, category: @category, payment_method: "credit_card",
+           total_installments: 3, installment_number: 1, installment_group_id: group_id, date: Date.current)
+    create(:expense, user: @user, category: @category, payment_method: "credit_card",
+           total_installments: 3, installment_number: 2, installment_group_id: group_id, date: 1.month.from_now)
+    create(:expense, user: @user, category: @category, payment_method: "credit_card",
+           total_installments: 3, installment_number: 3, installment_group_id: group_id, date: 2.months.from_now)
+    first_installment = @user.expenses.find_by(installment_group_id: group_id, installment_number: 1)
+
+    sign_in @user
+    assert_difference "Expense.count", -3 do
+      delete expense_path(first_installment)
+    end
+    assert_redirected_to expenses_path
+  end
+
+  test "POST create CC installments are created with nil payment_status" do
+    sign_in @user
+    post expenses_path, params: {
+      expense: {
+        description: "Phone", amount: 300, date: Date.current,
+        expense_type: "variable", category_id: @category.id,
+        payment_method: "credit_card", total_installments: 3,
+        installment_number: 1
+      }
+    }
+    installments = @user.expenses.where(total_installments: 3).order(:installment_number)
+    assert_equal 3, installments.count
+    installments.each { |e| assert_nil e.payment_status }
   end
 
   test "GET index regular variable expenses do not appear in installment sub-section" do

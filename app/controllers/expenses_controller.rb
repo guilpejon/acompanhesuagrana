@@ -103,6 +103,11 @@ class ExpensesController < ApplicationController
   def destroy
     group_id = @expense.installment? ? @expense.installment_group_id : nil
 
+    if @expense.credit_card_installment? && @expense.installment_number == 1
+      current_user.expenses.where(installment_group_id: group_id).destroy_all
+      return redirect_to expenses_path, notice: t("controllers.expenses.destroyed")
+    end
+
     if params[:delete_following].present?
       if @expense.recurring_source_id.present?
         current_user.expenses
@@ -146,6 +151,8 @@ class ExpensesController < ApplicationController
 
   def prevent_locked_edit
     if (@expense.recurring? || @expense.installment?) && @expense.date < Date.current.beginning_of_month
+      redirect_to expenses_path, alert: t("controllers.expenses.edit_locked")
+    elsif @expense.credit_card_installment? && @expense.installment_number > 1
       redirect_to expenses_path, alert: t("controllers.expenses.edit_locked")
     end
   end

@@ -260,6 +260,31 @@ class ExpenseTest < ActiveSupport::TestCase
     assert build(:expense, total_installments: 3, installment_number: 2).installment?
   end
 
+  # credit_card_installment?
+  test "credit_card_installment? returns true for credit_card with total_installments > 1" do
+    expense = build(:expense, payment_method: "credit_card", total_installments: 3, installment_number: 1)
+    assert expense.credit_card_installment?
+  end
+
+  test "credit_card_installment? returns false for boleto installment" do
+    expense = build(:expense, payment_method: "boleto", total_installments: 3, installment_number: 1)
+    assert_not expense.credit_card_installment?
+  end
+
+  test "credit_card_installment? returns false for credit_card non-installment" do
+    expense = build(:expense, payment_method: "credit_card", total_installments: 1)
+    assert_not expense.credit_card_installment?
+  end
+
+  test "credit card installment gets nil payment_status by default" do
+    user = create(:user)
+    category = create(:category, user: user)
+    expense = create(:expense, user: user, category: category,
+                     payment_method: "credit_card", total_installments: 3, installment_number: 1,
+                     expense_type: "variable", date: Date.current)
+    assert_nil expense.payment_status
+  end
+
   # installment_label
   test "installment_label returns installment_number/total_installments" do
     expense = build(:expense, installment_number: 2, total_installments: 6)

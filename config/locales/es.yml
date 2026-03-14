@@ -230,6 +230,10 @@ es:
         question: "¿Deseas eliminar solo esta cuota o esta y todas las restantes?"
         confirm: "Eliminar solo esta"
         this_and_following: "Eliminar esta y las restantes"
+      cc_installment_delete:
+        title: "Eliminar cuotas de tarjeta"
+        question: "Esto eliminará todas las cuotas de este grupo. Esta acción no se puede deshacer."
+        confirm: "Eliminar todas las cuotas"
     payment_statuses:
       pending: "No programado"
       scheduled: "Programado"

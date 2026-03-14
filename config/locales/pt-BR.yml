@@ -230,6 +230,10 @@ pt-BR:
         question: "Deseja excluir apenas esta parcela ou esta e todas as restantes?"
         confirm: "Excluir apenas esta"
         this_and_following: "Excluir esta e as restantes"
+      cc_installment_delete:
+        title: "Excluir parcelas do cartão"
+        question: "Isso excluirá todas as parcelas deste grupo. Esta ação não pode ser desfeita."
+        confirm: "Excluir todas as parcelas"
     payment_statuses:
       pending: "Não Agendado"
       scheduled: "Agendado"
