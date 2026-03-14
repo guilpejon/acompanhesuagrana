@@ -137,6 +137,7 @@ en:
       fixed_expenses: "Fixed"
       variable_expenses: "Variable"
       no_fixed_expenses: "No fixed expenses this month"
+      no_installment_expenses: "No installment expenses this month"
       no_variable_expenses: "No variable expenses this month"
       installment_expenses: "Variable - Installments"
       variable_other: "Variable - Other"

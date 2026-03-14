@@ -172,6 +172,7 @@ es:
       fixed_expenses: "Fijos"
       variable_expenses: "Variables"
       no_fixed_expenses: "Sin gastos fijos este mes"
+      no_installment_expenses: "Sin gastos en cuotas este mes"
       no_variable_expenses: "Sin gastos variables este mes"
       installment_expenses: "Variables - Cuotas"
       variable_other: "Variables - Otros"

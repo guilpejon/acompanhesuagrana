@@ -172,6 +172,7 @@ pt-BR:
       fixed_expenses: "Fixas"
       variable_expenses: "Variáveis"
       no_fixed_expenses: "Nenhuma despesa fixa este mês"
+      no_installment_expenses: "Nenhuma despesa parcelada este mês"
       no_variable_expenses: "Nenhuma despesa variável este mês"
       installment_expenses: "Variáveis - Parcelamentos"
       variable_other: "Variáveis - Outros"
