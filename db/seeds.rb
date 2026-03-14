@@ -32,6 +32,9 @@ inter = CreditCard.find_or_create_by!(user: user, name: "Inter Gold") do |c|
   c.color = "#F7B731"
 end
 
+# Definir cartão padrão
+user.update!(default_credit_card: nubank)
+
 # Buscar categorias
 housing = user.categories.find_by(name: "Housing")
 food = user.categories.find_by(name: "Food")
@@ -42,6 +45,9 @@ utilities = user.categories.find_by(name: "Utilities")
 education = user.categories.find_by(name: "Education")
 shopping = user.categories.find_by(name: "Shopping")
 other = user.categories.find_by(name: "Other")
+
+# Definir categoria padrão
+user.update!(default_category: food)
 
 # Receitas de exemplo (últimos 3 meses)
 puts "Criando receitas de exemplo..."
@@ -94,37 +100,60 @@ installment_groups = expenses_data.each_with_object({}) do |e, h|
   h[e[:desc]] = SecureRandom.uuid if e[:installments]
 end
 
-3.times do |i|
-  month_date = Date.current - i.months
-  expenses_data.each do |e|
-    # Variable expenses cannot be future-dated; skip if the day hasn't arrived yet this month
-    expense_day = e[:day]
-    next if i == 0 && e[:type] == "variable" && expense_day > Date.current.day
+year_start = Date.new(Date.current.year, 1, 1)
+all_months = (0..11).map { |i| year_start >> i }
 
-    # For installment expenses each month = one installment; skip months beyond total
-    total_inst = e[:installments]
-    if total_inst
-      installment_num = total_inst - i
-      next if installment_num < 1
-    end
+expenses_data.each do |e|
+  total_inst = e[:installments]
 
-    Expense.find_or_create_by!(
-      user: user,
-      description: e[:desc],
-      date: month_date.change(day: expense_day)
-    ) do |exp|
-      base = e[:amount] + rand(-5.0..5.0).round(2)
-      exp.amount = [ base, 1.0 ].max
-      exp.expense_type = e[:type]
-      exp.category = e[:cat]
-      exp.credit_card = e[:card]
-      exp.recurring = e[:recurring]
-      exp.recurrence_day = e[:recurring] ? e[:day] : nil
-      exp.payment_method = e[:payment]
-      if total_inst
-        exp.total_installments = total_inst
-        exp.installment_number = installment_num
+  if total_inst
+    # Installment expenses: start in January, one installment per month
+    total_inst.times do |inst_i|
+      month_date    = year_start >> inst_i
+      expense_date  = month_date.change(day: e[:day])
+      installment_num = inst_i + 1
+
+      Expense.find_or_create_by!(user: user, description: e[:desc], date: expense_date) do |exp|
+        exp.amount               = e[:amount]
+        exp.expense_type         = e[:type]
+        exp.category             = e[:cat]
+        exp.credit_card          = e[:card]
+        exp.recurring            = false
+        exp.payment_method       = e[:payment]
+        exp.total_installments   = total_inst
+        exp.installment_number   = installment_num
         exp.installment_group_id = installment_groups[e[:desc]]
+      end
+    end
+  elsif e[:recurring]
+    # Recurring fixed expenses: all 12 months of the year
+    all_months.each do |month_date|
+      expense_date = month_date.change(day: e[:day])
+
+      Expense.find_or_create_by!(user: user, description: e[:desc], date: expense_date) do |exp|
+        exp.amount         = e[:amount]
+        exp.expense_type   = e[:type]
+        exp.category       = e[:cat]
+        exp.credit_card    = e[:card]
+        exp.recurring      = true
+        exp.recurrence_day = e[:day]
+        exp.payment_method = e[:payment]
+      end
+    end
+  else
+    # Variable one-off expenses: only months/days that have already passed
+    all_months.each do |month_date|
+      expense_date = month_date.change(day: e[:day])
+      next if expense_date > Date.current
+
+      Expense.find_or_create_by!(user: user, description: e[:desc], date: expense_date) do |exp|
+        base               = e[:amount] + rand(-5.0..5.0).round(2)
+        exp.amount         = [ base, 1.0 ].max
+        exp.expense_type   = e[:type]
+        exp.category       = e[:cat]
+        exp.credit_card    = e[:card]
+        exp.recurring      = false
+        exp.payment_method = e[:payment]
       end
     end
   end
