@@ -512,6 +512,11 @@ en:
       actual_by_category: "Actual Spending by Category"
       all_expenses: "All Expenses"
       no_expenses_month: "No expenses recorded this month"
+      monthly_spending_trend: "Monthly Spending Progress"
+      actual_spending: "Actual"
+      projected_spending: "Projected"
+      income_line: "Income"
+      day_of_month: "Day"
 
   settings:
     edit:

@@ -547,6 +547,11 @@ pt-BR:
       actual_by_category: "Gastos Reais por Categoria"
       all_expenses: "Todas as Despesas"
       no_expenses_month: "Nenhuma despesa registrada neste mês"
+      monthly_spending_trend: "Progresso de Gastos do Mês"
+      actual_spending: "Realizado"
+      projected_spending: "Projetado"
+      income_line: "Receita"
+      day_of_month: "Dia"
 
   settings:
     edit:

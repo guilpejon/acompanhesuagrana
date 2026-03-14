@@ -547,6 +547,11 @@ es:
       actual_by_category: "Gastos Reales por Categoría"
       all_expenses: "Todos los Gastos"
       no_expenses_month: "Sin gastos registrados este mes"
+      monthly_spending_trend: "Progreso de Gastos del Mes"
+      actual_spending: "Realizado"
+      projected_spending: "Proyectado"
+      income_line: "Ingresos"
+      day_of_month: "Día"
 
   settings:
     edit:
