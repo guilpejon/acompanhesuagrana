@@ -4,8 +4,8 @@
 puts "Criando usuário demo..."
 
 user = User.find_or_create_by!(email: "demo@monitoresuagrana.com.br") do |u|
-  u.password = "senha"
-  u.password_confirmation = "senha"
+  u.password = "password"
+  u.password_confirmation = "password"
   u.name = "Usuário Demo"
   u.currency = "BRL"
 end
