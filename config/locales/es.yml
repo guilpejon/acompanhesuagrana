@@ -47,8 +47,6 @@ es:
       category:
         name: "Nombre"
         color: "Color"
-      payee:
-        name: "Nombre"
       possession:
         name: "Nombre"
         possession_type: "Tipo"
@@ -106,7 +104,6 @@ es:
       possessions: "Patrimonio"
       forecast: "Proyección"
       categories: "Categorías"
-      payees: "Beneficiarios"
       settings: "Configuración"
       sign_out: "Cerrar sesión"
       section_overview: "Resumen"
@@ -139,7 +136,6 @@ es:
     cash_flow: "Flujo de Caja — Últimos 6 Meses"
     income_label: "Ingresos"
     expenses_label: "Gastos"
-    spending_by_payee: "Gastos por Beneficiario"
     recent_transactions: "Transacciones Recientes"
     view_all: "Ver todas"
     no_expenses_month: "Sin gastos registrados este mes"
@@ -147,7 +143,6 @@ es:
     no_data_12_months: "Sin datos de los últimos 12 meses"
     spending_by_category_6m: "Gastos por Categoría — Últimos 6 Meses"
     spending_by_category_12m: "Gastos por Categoría — Últimos 12 Meses"
-    no_payees_month: "Ningún beneficiario asignado a gastos este mes"
     no_recent_transactions: "Sin transacciones recientes"
     card_count:
       one: "1 tarjeta"
@@ -195,8 +190,6 @@ es:
       credit_card: "Tarjeta"
       debito_automatico: "Déb. Auto."
       category: "Categoría"
-      payee: "Beneficiario"
-      payee_placeholder: "Buscar o crear beneficiario..."
       description: "Descripción"
       description_placeholder: "¿En qué gastaste?"
       date: "Fecha"
@@ -439,24 +432,6 @@ es:
       update: "Actualizar Categoría"
       cancel: "Cancelar"
 
-  payees:
-    index:
-      title: "Beneficiarios"
-      new: "Nuevo Beneficiario"
-      delete_confirm: "¿Eliminar este beneficiario?"
-      delete_modal_title: "Eliminar beneficiario"
-      no_payees: "Aún no hay beneficiarios"
-    new:
-      title: "Nuevo Beneficiario"
-    edit:
-      title: "Editar Beneficiario"
-    form:
-      name: "Nombre *"
-      name_placeholder: "ej. Amazon, Netflix, Propietario"
-      add: "Crear Beneficiario"
-      update: "Actualizar Beneficiario"
-      cancel: "Cancelar"
-
   possessions:
     index:
       title: "Patrimonio"
@@ -652,8 +627,8 @@ es:
       possessions_desc: "Registra y sigue el valor de bienes como inmuebles, vehículos y electrónica."
       forecast_title: "Proyección"
       forecast_desc: "Ve proyecciones futuras basadas en gastos recurrentes y en cuotas."
-      categories_title: "Categorías & Beneficiarios"
-      categories_desc: "Organiza tus gastos con categorías y beneficiarios personalizados."
+      categories_title: "Categorías"
+      categories_desc: "Organiza tus gastos con categorías personalizadas."
       trust_free: "Gratis para siempre"
       trust_no_card: "Sin tarjeta de crédito"
       trust_private: "Tus datos son tuyos"
@@ -713,10 +688,6 @@ es:
       destroyed: "Categoría eliminada."
       default_set: "Categoría por defecto establecida."
       default_cleared: "Categoría por defecto eliminada."
-    payees:
-      created: "Beneficiario creado."
-      updated: "Beneficiario actualizado."
-      destroyed: "Beneficiario eliminado."
     possessions:
       created: "Bien agregado."
       updated: "Bien actualizado."

@@ -69,7 +69,6 @@ en:
       possessions: "Possessions"
       forecast: "Forecast"
       categories: "Categories"
-      payees: "Payees"
       settings: "Settings"
       sign_out: "Sign out"
       section_overview: "Overview"
@@ -102,7 +101,6 @@ en:
     cash_flow: "Cash Flow — Last 6 Months"
     income_label: "Income"
     expenses_label: "Expenses"
-    spending_by_payee: "Spending by Payee"
     recent_transactions: "Recent Transactions"
     view_all: "View all"
     no_expenses_month: "No expenses recorded this month"
@@ -110,7 +108,6 @@ en:
     no_data_12_months: "No data for the last 12 months"
     spending_by_category_6m: "Spending by Category — Last 6 Months"
     spending_by_category_12m: "Spending by Category — Last 12 Months"
-    no_payees_month: "No payees assigned to expenses this month"
     no_recent_transactions: "No recent transactions"
     card_count:
       one: "1 card"
@@ -158,8 +155,6 @@ en:
       credit_card: "Card"
       debito_automatico: "Auto Debit"
       category: "Category"
-      payee: "Payee"
-      payee_placeholder: "Search or create payee..."
       description: "Description"
       description_placeholder: "What did you spend on?"
       date: "Date"
@@ -402,24 +397,6 @@ en:
       update: "Update Category"
       cancel: "Cancel"
 
-  payees:
-    index:
-      title: "Payees"
-      new: "New Payee"
-      delete_confirm: "Delete this payee?"
-      delete_modal_title: "Delete payee"
-      no_payees: "No payees yet"
-    new:
-      title: "New Payee"
-    edit:
-      title: "Edit Payee"
-    form:
-      name: "Name *"
-      name_placeholder: "e.g. Amazon, Netflix, Landlord"
-      add: "Create Payee"
-      update: "Update Payee"
-      cancel: "Cancel"
-
   possessions:
     index:
       title: "Possessions"
@@ -615,8 +592,8 @@ en:
       possessions_desc: "Register and track the value of assets like real estate, vehicles, and electronics."
       forecast_title: "Forecast"
       forecast_desc: "See future projections based on recurring and installment expenses."
-      categories_title: "Categories & Payees"
-      categories_desc: "Organize your spending with custom categories and payees."
+      categories_title: "Categories"
+      categories_desc: "Organize your spending with custom categories."
       trust_free: "Free forever"
       trust_no_card: "No credit card required"
       trust_private: "Your data stays yours"
@@ -676,10 +653,6 @@ en:
       destroyed: "Category deleted."
       default_set: "Default category set."
       default_cleared: "Default category removed."
-    payees:
-      created: "Payee created."
-      updated: "Payee updated."
-      destroyed: "Payee deleted."
     possessions:
       created: "Possession added."
       updated: "Possession updated."

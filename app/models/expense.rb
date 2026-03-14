@@ -3,9 +3,7 @@ class Expense < ApplicationRecord
   belongs_to :category
   belongs_to :credit_card, optional: true
   belongs_to :bank_account, optional: true
-  belongs_to :payee, optional: true
-
-  TYPES = %w[fixed variable].freeze
+TYPES = %w[fixed variable].freeze
   PAYMENT_METHODS = %w[cash pix boleto credit_card debito_automatico].freeze
   BANK_DEBIT_METHODS = %w[pix boleto debito_automatico].freeze
   PAYMENT_STATUSES = %w[pending scheduled paid].freeze

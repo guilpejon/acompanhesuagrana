@@ -39,8 +39,7 @@ class User < ApplicationRecord
   belongs_to :default_category, class_name: "Category", optional: true
   has_many :investments, dependent: :destroy
   has_many :bank_accounts, dependent: :destroy
-  has_many :payees, dependent: :destroy
-  has_many :possessions, dependent: :destroy
+has_many :possessions, dependent: :destroy
 
   after_create :create_default_categories
 

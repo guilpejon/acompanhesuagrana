@@ -31,7 +31,6 @@ Rails.application.routes.draw do
       patch :set_default
     end
   end
-  resources :payees
   resources :possessions
   get "/forecast", to: "forecast#index", as: :forecast
 

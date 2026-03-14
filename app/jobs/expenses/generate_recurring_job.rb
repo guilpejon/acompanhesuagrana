@@ -21,7 +21,6 @@ module Expenses
             category_id: reference.category_id,
             credit_card_id: reference.credit_card_id,
             bank_account_id: reference.bank_account_id,
-            payee_id: reference.payee_id,
             payment_method: reference.payment_method,
             total_installments: 1,
             installment_number: 1,
